@@ -2,10 +2,12 @@
   "name": "todo-mvc-auth-local",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "vite --config frontend/vite.config.js",
+    "build": "vite build --config frontend/vite.config.js"
   },
   "author": "",
   "license": "MIT",
@@ -13,9 +15,7 @@
     "bcrypt": "^5.0.1",
     "connect-mongo": "^3.2.0",
     "dotenv": "^8.2.0",
-    "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "express-flash": "^0.0.2",
     "express-session": "^1.17.1",
     "mongodb": "^3.6.5",
     "mongoose": "^5.12.3",
@@ -23,6 +23,13 @@
     "nodemon": "^2.0.7",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-router-dom": "^7.16.0",
     "validator": "^13.6.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.2",
+    "vite": "^8.0.14"
   }
 }

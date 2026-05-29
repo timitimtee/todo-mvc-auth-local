@@ -1,43 +1,57 @@
 # REFERENCES
 Before writing code, read the relevant reference. Match its patterns exactly.
 
-## Controllers — `controllers/home.js`
-- One exported function per route action, named after what it does (`getTodos`, `createTodo`)
-- Always `try/catch`, always pass errors to `next(err)`
+## Architecture
+Split into two independent layers:
+- `frontend/` — Vite + React. Handles all UI and client-side routing via React Router.
+- `backend/` — Node + Express. Serves a JSON REST API only. No views, no EJS, no static files in dev.
 
-## Models — `models/Todo.js`
+In production, `server.js` serves the Vite build from `dist/`.
+
+## Backend
+
+### Controllers — `backend/controllers/todos.js`
+- One exported function per route action, named after what it does (`getTodos`, `createTodo`)
+- Always `try/catch`, log errors, respond with `res.json()`
+- Auth controller (`controllers/auth.js`) uses passport callbacks and returns `{ success: true }` or `{ errors: [...] }`
+
+### Models — `backend/models/Todo.js`
 - Explicit types + `required` validation on every field
 - No business logic — data shape only
-- Exception: auth models (`User.js`) may include password hashing hooks and instance methods
+- Exception: `User.js` may include password hashing hooks and instance methods
 
-## Routes — `routes/main.js`
+### Routes — `backend/routes/todos.js`
 - Import controller, map HTTP verb + path to controller function
-- Middleware goes inline in the route definition: `router.get('/', ensureAuth, controller.fn)`
-- No other inline logic — all logic lives in controllers
+- Auth middleware goes inline: `router.get('/', ensureAuth, controller.fn)`
+- No inline logic — all logic lives in controllers
+- `routes/main.js` → auth endpoints (`/login`, `/logout`, `/signup`)
+- `routes/todos.js` → todo CRUD endpoints (`/todos/*`)
 
-## Middleware — `middleware/auth.js`
+### Middleware — `backend/middleware/auth.js`
 - Single responsibility per function
-- Always calls `next()` or redirects — never leaves request hanging
+- Always calls `next()` or responds with `res.status(401).json(...)` — never leaves request hanging
 
-## Views (EJS) — `views/index.ejs`
-- Forms → also check `views/login.ejs`
-- Dynamic lists → also check `views/todos.ejs`
-- No inline `<style>` or `<script>` blocks
-- CSS in `/public/css/`, JS in `/public/js/`, linked via `<link rel="stylesheet" href="/css/name.css">`
-
-## CSS
-- Base styles, variables, resets → `public/css/global.css` (element selectors ok here)
-- Page styles → `public/css/homepage.css` (one file per page, named after it)
-- Use section comments (`/* ─── Nav ───── */`) to separate blocks
-- Class selectors for components; no IDs; nothing page-specific goes in `global.css`
-
-## Client-side JS — `public/js/main.js`
-- Vanilla only (unless library is already in `package.json`)
-- Heavy logic in named functions (`deleteTodo`, `markComplete`) — arrow functions ok for event binding only
-- One file per page if logic grows, named after the page (`todos.js`)
-
-## Server — `server.js`
+### Server — `backend/server.js`
 - Follow existing `app.use()` pattern when wiring new routes or middleware
 
-## Config — `config/database.js`
-- Export a single setup function, called once from `server.js`
+### Config — `backend/config/database.js`
+- Export single setup function, called once from `server.js`
+- Passport config in `backend/config/passport.js`
+- Env vars in `backend/config/.env`
+
+## Frontend
+
+### Entry — `frontend/src/main.jsx`
+- Mounts `<App />` to `#root`
+
+### Routing — `frontend/src/App.jsx`
+- All client-side routes defined here with React Router `<Routes>` / `<Route>`
+- These are UI routes only — separate from Express API routes
+
+### Components — `frontend/src/components/`
+- One file per page/feature
+- Fetch data from Express API using `fetch()` calls to backend endpoints
+- Handle auth state via API responses (redirect on 401, etc.)
+
+### Styles — `frontend/public/css/` or co-located in components
+- No global `/public/css/` on the backend

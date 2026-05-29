@@ -31,8 +31,8 @@ app.use(
 
 app.use(passport.initialize())
 app.use(passport.session())
-app.use('/', mainRoutes)
-app.use('/todos', todoRoutes)
+app.use('/api', mainRoutes)
+app.use('/api/todos', todoRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../dist')))

@@ -1,3 +1,5 @@
+import Button from "./OrderNow";
+
 export default function Homepage() {
   return (
     <>
@@ -6,14 +8,17 @@ export default function Homepage() {
         <div className="nav-actions">
           <span>&#9906;</span>
           <span>&#9776;</span>
-          <button className="nav-btn">Booking Now</button>
+          <Button />
         </div>
       </nav>
 
       <section className="header">
         <div className="header-text">
           <h1>Lorem ipsum dolor sit amet consectetur adipiscing</h1>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.
+          </p>
           <button className="header-btn">Get Started</button>
         </div>
         <div className="header-image">
@@ -26,11 +31,14 @@ export default function Homepage() {
           <h2>Our Special Dish</h2>
           <p className="section-sub">Lorem ipsum dolor sit amet consectetur.</p>
           <div className="gallery">
-            {['Green Salad', 'Beef Salad', 'Nut Salad'].map((dish) => (
+            {["Green Salad", "Beef Salad", "Nut Salad"].map((dish) => (
               <div key={dish} className="card">
                 <div className="img-placeholder card-img"></div>
                 <h3>{dish}</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.</p>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipiscing elit sed do
+                  eiusmod tempor incididunt.
+                </p>
               </div>
             ))}
           </div>
@@ -43,5 +51,5 @@ export default function Homepage() {
         </div>
       </footer>
     </>
-  )
+  );
 }

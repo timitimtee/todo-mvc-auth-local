@@ -9,7 +9,7 @@ export default function Todos() {
   const navigate = useNavigate()
 
   async function fetchTodos() {
-    const res = await fetch('/todos')
+    const res = await fetch('/api/todos')
     if (res.status === 401) {
       navigate('/login')
       return
@@ -26,7 +26,7 @@ export default function Todos() {
 
   async function createTodo(e) {
     e.preventDefault()
-    await fetch('/todos/createTodo', {
+    await fetch('/api/todos/createTodo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ todoItem: newTodo }),
@@ -36,7 +36,7 @@ export default function Todos() {
   }
 
   async function deleteTodo(id) {
-    await fetch('/todos/deleteTodo', {
+    await fetch('/api/todos/deleteTodo', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ todoIdFromJSFile: id }),
@@ -45,7 +45,7 @@ export default function Todos() {
   }
 
   async function toggleTodo(id, completed) {
-    const route = completed ? '/todos/markIncomplete' : '/todos/markComplete'
+    const route = completed ? '/api/todos/markIncomplete' : '/api/todos/markComplete'
     await fetch(route, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -55,7 +55,7 @@ export default function Todos() {
   }
 
   async function logout() {
-    await fetch('/logout')
+    await fetch('/api/logout', { method: 'POST' })
     navigate('/')
   }
 

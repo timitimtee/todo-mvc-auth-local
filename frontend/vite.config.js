@@ -10,10 +10,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/login": "http://localhost:2121",
-      "/logout": "http://localhost:2121",
-      "/signup": "http://localhost:2121",
-      "/todos": "http://localhost:2121",
+      "/api": "http://localhost:2121",
     },
   },
 });

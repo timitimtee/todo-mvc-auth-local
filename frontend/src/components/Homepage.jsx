@@ -6,7 +6,7 @@ export default function Homepage() {
       <nav className="nav">
         <div className="nav-logo">Vegety</div>
         <div className="nav-actions">
-          <span>&#9906;</span>
+          {/* <span>&#9906;</span>*/}
           <span>&#9776;</span>
           <Button />
         </div>

@@ -44,6 +44,15 @@
     align-items: center;
 }
 
+/* ─── Sticky Order Button (mobile only) ─────────── */
+.orderNow-btn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
 /* ─── Placeholders ───────────────────────────────── */
 .img-placeholder {
     background: #ddd;
@@ -67,5 +76,10 @@
     .gallery {
         flex-direction: row;
         align-items: flex-start;
+    }
+
+    .orderNow-btn {
+        position: static;
+        width: auto;
     }
 }

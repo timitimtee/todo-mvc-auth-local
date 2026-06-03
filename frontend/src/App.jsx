@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Homepage from "./components/Homepage";
-import Menu from "./components/Menu";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import Todos from "./components/Todos";
-import Manage from "./components/Manage";
+import Homepage from "./components/pages/Homepage";
+import Menu from "./components/pages/Menu";
+import Login from "./components/pages/Login";
+import Signup from "./components/pages/Signup";
+import Todos from "./components/pages/Todos";
+import Manage from "./components/pages/Manage";
 
 export default function App() {
   return (

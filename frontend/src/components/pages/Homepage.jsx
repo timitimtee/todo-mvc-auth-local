@@ -1,4 +1,4 @@
-import Button from "./OrderNow";
+import Button from "../OrderNow";
 
 export default function Homepage() {
   return (

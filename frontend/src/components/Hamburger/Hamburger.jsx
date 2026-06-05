@@ -1,9 +1,10 @@
 import "hamburgers/dist/hamburgers.css";
+import "./hamburger.css";
 
 export default function Hamburger({ isActive, onClick }) {
   return (
     <button
-      className={`hamburger hamburger--spring ${isActive ? "is-active" : ""}`}
+      className={`hamburger-custom hamburger hamburger--spring ${isActive ? "is-active" : ""}`}
       onClick={onClick}
       type="button"
     >

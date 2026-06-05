@@ -1,0 +1,19 @@
+/* Resize + recolor */
+.hamburger-custom .hamburger-box {
+    width: 28px; /* change bar width */
+}
+
+.hamburger-custom .hamburger-inner,
+.hamburger-custom .hamburger-inner::before,
+.hamburger-custom .hamburger-inner::after {
+    width: 32px; /* must match .hamburger-box width */
+    height: 4px; /* bar thickness */
+    background-color: var(--brand-primary); /* bar color */
+}
+
+/* Color when "X" (active state) */
+.hamburger-custom.is-active .hamburger-inner,
+.hamburger-custom.is-active .hamburger-inner::before,
+.hamburger-custom.is-active .hamburger-inner::after {
+    background-color: var(--brand-primary); /* active color */
+}

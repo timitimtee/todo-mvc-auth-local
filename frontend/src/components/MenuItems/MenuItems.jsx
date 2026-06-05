@@ -3,10 +3,26 @@ import "./MenuItems.css";
 
 export default function MenuItems() {
   const [menuItems, setMenuItems] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(null);
   const carouselRef = useRef(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollStart = useRef(0);
+
+  useEffect(() => {
+    fetch("/api/menuitems")
+      .then((res) => res.json())
+      .then((data) => setMenuItems(data.menuItems));
+  }, []);
+
+  const grouped = menuItems.reduce((acc, item) => {
+    const cat = item.menu_item_category;
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(item);
+    return acc;
+  }, {});
+
+  const categories = Object.keys(grouped);
 
   function onMouseDown(e) {
     isDragging.current = true;
@@ -26,17 +42,23 @@ export default function MenuItems() {
     if (carouselRef.current) carouselRef.current.style.cursor = "grab";
   }
 
-  useEffect(() => {
-    fetch("/api/menuitems")
-      .then((res) => res.json())
-      .then((data) => setMenuItems(data.menuItems));
-  }, []);
+  function scrollCarousel(dir) {
+    carouselRef.current.scrollLeft += dir * 150;
+  }
+
+  function jumpToCategory(cat) {
+    setActiveCategory(cat);
+    const el = document.getElementById(`section-${cat}`);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  }
 
   return (
     <>
       <section className="menu-browse">
         <div className="category-row">
-          <span className="category-hamburger">&#9776;</span>
+          <button className="carousel-arrow" onClick={() => scrollCarousel(-1)}>
+            &#8249;
+          </button>
           <div
             className="category-carousel"
             ref={carouselRef}
@@ -45,48 +67,55 @@ export default function MenuItems() {
             onMouseUp={stopDrag}
             onMouseLeave={stopDrag}
           >
-            {["BURGERS", "SOUPS", "DRINKS", "DESSERTS", "PASTA"].map((cat) => (
-              <span key={cat} className="category-item">
+            {categories.map((cat) => (
+              <span
+                key={cat}
+                className={`category-item${activeCategory === cat ? " category-item--active" : ""}`}
+                onClick={() => jumpToCategory(cat)}
+              >
                 {cat}
               </span>
             ))}
           </div>
+          <button className="carousel-arrow" onClick={() => scrollCarousel(1)}>
+            &#8250;
+          </button>
         </div>
         <div className="search-bar">
           <span className="search-icon">&#128269;</span>
           <input type="text" placeholder="Search" className="search-input" />
         </div>
-        <div className="featured-section">
-          <h2 className="featured-title">Featured Items</h2>
-          <div className="items-feed"></div>
-        </div>
       </section>
       <div className="menu-section">
-        <h2 className="menu-section-title">Menu Items</h2>
-        <ul className="menu-list">
-          {menuItems.map((item) => (
-            <li key={item._id} className="menu-item">
-              <div className="menu-item-info">
-                <h3 className="menu-item-name">{item.menu_item_name}</h3>
-                {item.menu_item_description && (
-                  <p className="menu-item-description">
-                    {item.menu_item_description}
-                  </p>
-                )}
-                <p className="menu-item-price">
-                  ${item.menu_item_price.toFixed(2)}
-                </p>
-              </div>
-              <div className="menu-item-image-wrapper">
-                <img
-                  src={item.menu_item_image}
-                  alt={item.menu_item_name}
-                  className="menu-item-image"
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
+        {categories.map((cat) => (
+          <div key={cat} id={`section-${cat}`} className="category-section">
+            <h2 className="menu-section-title">{cat}</h2>
+            <ul className="menu-list">
+              {grouped[cat].map((item) => (
+                <li key={item._id} className="menu-item">
+                  <div className="menu-item-info">
+                    <h3 className="menu-item-name">{item.menu_item_name}</h3>
+                    {item.menu_item_description && (
+                      <p className="menu-item-description">
+                        {item.menu_item_description}
+                      </p>
+                    )}
+                    <p className="menu-item-price">
+                      ${item.menu_item_price.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="menu-item-image-wrapper">
+                    <img
+                      src={item.menu_item_image}
+                      alt={item.menu_item_name}
+                      className="menu-item-image"
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </>
   );

@@ -82,10 +82,36 @@
     user-select: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    flex: 1;
 }
 
 .category-carousel::-webkit-scrollbar {
     display: none;
+}
+
+.carousel-arrow {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #c0392b;
+    padding: 0 6px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.carousel-arrow:hover {
+    color: #e74c3c;
+}
+
+.category-item--active {
+    color: #c0392b;
+    border-bottom: 2px solid #c0392b;
+    font-weight: 700;
+}
+
+.category-section {
+    margin-bottom: 8px;
 }
 
 .menu-item-add-btn {

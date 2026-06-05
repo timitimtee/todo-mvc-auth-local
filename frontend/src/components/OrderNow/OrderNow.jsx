@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./OrderNow.css";
 
 function Button() {
   const navigate = useNavigate();
@@ -8,7 +9,11 @@ function Button() {
     navigate("/ordernow");
   }
 
-  return <button className="orderNow-btn" onClick={handleClick}>Order Now</button>;
+  return (
+    <button className="orderNow-btn" onClick={handleClick}>
+      ORDER NOW
+    </button>
+  );
 }
 
 export default Button;

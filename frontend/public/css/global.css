@@ -6,5 +6,126 @@
 }
 
 body {
-    font-family: sans-serif;
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+}
+
+/* ---- Fonts -------------------------------*/
+
+/* ─── Design tokens ──────────────────────────────── */
+:root {
+    /* Greens */
+    --brand-darkest: #1c3128;
+    --brand-primary: #2d6a4f;
+    --brand-mid: #52b788;
+    --brand-light: #95d5b2;
+    --brand-pale: #d8f3dc;
+
+    /* Accent */
+    --accent: #c9973e;
+    --accent-pale: #f7edd2;
+
+    /* Backgrounds */
+    --bg-page: #f9f6f0;
+    --bg-card: #ffffff;
+    --bg-tint: #eef7f1;
+
+    /* Text */
+    --text-heading: #1c3128;
+    --text-body: #3e4a3f;
+    --text-muted: #6d8b74;
+    --text-disabled: #b0c4b5;
+    --text-inverse: #ffffff;
+
+    /* UI */
+    --border: #c8e3d0;
+    --overlay: rgba(28, 49, 40, 0.72);
+
+    /* Status */
+    --success: #2d6a4f;
+    --warning: #c9973e;
+    --error: #b85c3a;
+}
+
+/* ─── Background utilities ───────────────────────── */
+.bg-page {
+    background-color: var(--bg-page);
+}
+.bg-card {
+    background-color: var(--bg-card);
+}
+.bg-tint {
+    background-color: var(--bg-tint);
+}
+.bg-brand {
+    background-color: var(--brand-primary);
+}
+.bg-brand-dark {
+    background-color: var(--brand-darkest);
+}
+.bg-brand-mid {
+    background-color: var(--brand-mid);
+}
+.bg-brand-pale {
+    background-color: var(--brand-pale);
+}
+.bg-accent {
+    background-color: var(--accent);
+}
+.bg-accent-pale {
+    background-color: var(--accent-pale);
+}
+.bg-overlay {
+    background-color: var(--overlay);
+}
+
+/* ─── Text-color utilities ───────────────────────── */
+.text-heading {
+    color: var(--text-heading);
+}
+.text-body {
+    color: var(--text-body);
+}
+.text-muted {
+    color: var(--text-muted);
+}
+.text-disabled {
+    color: var(--text-disabled);
+}
+.text-inverse {
+    color: var(--text-inverse);
+}
+.text-brand {
+    color: var(--brand-primary);
+}
+.text-accent {
+    color: var(--accent);
+}
+
+/* ─── Border utilities ───────────────────────────── */
+.border-brand {
+    border-color: var(--border);
+}
+
+/* ─── Status utilities ───────────────────────────── */
+.bg-success {
+    background-color: var(--success);
+}
+.bg-warning {
+    background-color: var(--warning);
+}
+.bg-error {
+    background-color: var(--error);
+}
+.text-success {
+    color: var(--success);
+}
+.text-warning {
+    color: var(--warning);
+}
+.text-error {
+    color: var(--error);
 }

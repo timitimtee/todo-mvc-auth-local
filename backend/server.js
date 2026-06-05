@@ -10,6 +10,7 @@ const connectDB = require('./config/database')
 const mainRoutes = require('./routes/main')
 const todoRoutes = require('./routes/todos')
 const adminRoutes = require('./routes/admin')
+const menuItemRoutes = require('./routes/menuItems')
 
 require('dotenv').config({ path: path.join(__dirname, 'config/.env') })
 
@@ -35,6 +36,7 @@ app.use(passport.session())
 app.use('/api', mainRoutes)
 app.use('/api/todos', todoRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/menuitems', menuItemRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../dist')))

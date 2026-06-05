@@ -10,6 +10,7 @@ export default function Nav() {
   return (
     <nav className="nav">
       <Logo />
+      <h1 className="title">Biofresh</h1>
       <div className="nav-links">
         <NavLink to="/menu" label="Menu" />
         <NavLink to="/about" label="About Us" />

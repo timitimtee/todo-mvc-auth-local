@@ -1,0 +1,69 @@
+.delivery-pickup-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pill-container {
+    display: flex;
+    background-color: #f0f0f0;
+    border-radius: 999px;
+    padding: 4px;
+    gap: 4px;
+    justify-content: space-evenly;
+}
+
+.pill-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+    width: 100%;
+    transition:
+        background-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.pill-option img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.pill-option.active {
+    background-color: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.selection-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 4px;
+    border-bottom: 1px solid #e8e8e8;
+    cursor: pointer;
+}
+
+.selection-row img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.selection-row span {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+}
+
+.selection-row .arrow {
+    flex: 0;
+    font-size: 14px;
+    color: #999;
+}

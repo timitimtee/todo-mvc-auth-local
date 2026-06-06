@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./MenuItems.css";
 
-export default function MenuItems() {
+export default function MenuItems({ onAddItem }) {
   const [menuItems, setMenuItems] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const carouselRef = useRef(null);
@@ -103,6 +103,7 @@ export default function MenuItems() {
                     <p className="menu-item-price">
                       ${item.menu_item_price.toFixed(2)}
                     </p>
+                    <button onClick={onAddItem}>Add to cart</button>
                   </div>
                   <div className="menu-item-image-wrapper">
                     <img

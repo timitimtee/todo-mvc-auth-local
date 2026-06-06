@@ -4,8 +4,9 @@ import NavLink from "../NavLink";
 import Hamburger from "../Hamburger/Hamburger";
 import Logo from "../Logo/Logo";
 import logoTitle from "./biofreshLogo-title-fb.jpg";
+import ShoppingCart from "../ShoppingCart/ShoppingCart";
 
-export default function Nav() {
+export default function Nav({ cartCount }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -30,6 +31,7 @@ export default function Nav() {
         <NavLink to="/about" label="About Us" />
         <NavLink to="/contact" label="Contact" />
       </div>
+      <ShoppingCart count={cartCount} />
     </nav>
   );
 }

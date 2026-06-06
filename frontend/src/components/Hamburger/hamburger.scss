@@ -12,7 +12,7 @@ $hamburger-layer-color: var(--brand-primary); // bar color (resting)
 $hamburger-active-layer-color: var(--brand-primary); // bar color (is-active)
 
 // Only compile the type we actually use -> smaller CSS output.
-$hamburger-types: (spring);
+/* $hamburger-types: (spring); */
 
 // --- Import LAST. Explicit node_modules path so dart-sass can resolve it. ---
 @import "hamburgers/_sass/hamburgers/hamburgers";

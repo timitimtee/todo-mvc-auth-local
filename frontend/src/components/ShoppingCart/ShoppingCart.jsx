@@ -1,5 +1,6 @@
 import "./ShoppingCart.css";
 import shoppingCart from "./icons8-shopping-bag.png";
+import SignInButton from "./SignInButton/SignInButton";
 
 export default function ShoppingCart({ count }) {
   return (
@@ -10,7 +11,7 @@ export default function ShoppingCart({ count }) {
           <span className="cartCount">{count}</span>
         </div>
         <div className="sign-in">
-          <span>Sign In</span>
+          <SignInButton />
         </div>
       </div>
     </>

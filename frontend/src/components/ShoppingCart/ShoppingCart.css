@@ -2,6 +2,11 @@
     display: flex;
     align-items: center;
     gap: 15px;
+
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 14px;
 }
 
 .shopping-cart {
@@ -10,13 +15,13 @@
     justify-content: center;
     border-radius: 99px;
     background-color: var(--brand-mid);
-    width: 60px;
-    height: 40px;
+    width: 55px;
+    height: 35px;
 }
 
 .shopping-cart img {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     object-fit: contain;
 }
 

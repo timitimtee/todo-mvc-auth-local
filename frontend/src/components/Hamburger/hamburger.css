@@ -6,7 +6,7 @@
 .hamburger-custom .hamburger-inner,
 .hamburger-custom .hamburger-inner::before,
 .hamburger-custom .hamburger-inner::after {
-    width: 32px; /* must match .hamburger-box width */
+    width: 28px; /* must match .hamburger-box width */
     height: 4px; /* bar thickness */
     background-color: var(--brand-primary); /* bar color */
 }

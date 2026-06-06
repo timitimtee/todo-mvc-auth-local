@@ -1,0 +1,18 @@
+// hamburger.scss
+// ORDER MATTERS: library vars use `!default`, so our values must be set
+// BEFORE the @import. Set first -> library skips its default -> uses ours.
+
+// --- Overrides ---
+$hamburger-layer-width: 20px; // bar width
+$hamburger-layer-height: 3px; // bar thickness
+$hamburger-layer-spacing: 3.5px; // gap between bars
+$hamburger-padding-x: 0px; // horizontal padding around icon
+$hamburger-padding-y: 10px; // vertical padding around icon
+$hamburger-layer-color: var(--brand-primary); // bar color (resting)
+$hamburger-active-layer-color: var(--brand-primary); // bar color (is-active)
+
+// Only compile the type we actually use -> smaller CSS output.
+$hamburger-types: (spring);
+
+// --- Import LAST. Explicit node_modules path so dart-sass can resolve it. ---
+@import "hamburgers/_sass/hamburgers/hamburgers";

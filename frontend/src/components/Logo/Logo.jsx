@@ -1,4 +1,4 @@
-import restaurantImg from "../Nav/restaurant.png";
+import restaurantImg from "./biofreshLogofb.png";
 import "./Logo.css";
 
 export default function Logo() {

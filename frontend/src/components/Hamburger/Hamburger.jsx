@@ -1,5 +1,7 @@
-import "hamburgers/dist/hamburgers.css";
-import "./hamburger.css";
+// Pure SCSS path: hamburger.scss compiles base + the `spring` type itself.
+// Do NOT also import dist/hamburgers.css — it's pre-baked at default sizes
+// and would override our customizations.
+import "./hamburger.scss";
 
 export default function Hamburger({ isActive, onClick }) {
   return (

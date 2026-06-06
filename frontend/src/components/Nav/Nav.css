@@ -12,6 +12,20 @@
     height: 60px;
 }
 
+.left-side-nav-container {
+    display: flex;
+}
+
+.logo-title-container {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.logo-title {
+    object-fit: contain;
+    width: 100px;
+}
 .nav-links {
     display: flex;
     gap: 1rem;

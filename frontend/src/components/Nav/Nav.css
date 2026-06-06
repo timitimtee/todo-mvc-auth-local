@@ -14,17 +14,23 @@
 
 .left-side-nav-container {
     display: flex;
+    min-width: 0;
+    flex-shrink: 1;
 }
 
 .logo-title-container {
     display: flex;
     align-items: center;
     margin-left: 15px;
+    min-width: 0;
+    flex-shrink: 1;
 }
 
 .logo-title {
     object-fit: contain;
     width: 100px;
+    min-width: 0;
+    flex-shrink: 1;
 }
 .nav-links {
     display: flex;

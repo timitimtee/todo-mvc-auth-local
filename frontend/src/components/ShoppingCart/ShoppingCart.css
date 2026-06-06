@@ -1,0 +1,27 @@
+.shopping-signin-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.shopping-cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 99px;
+    background-color: var(--brand-mid);
+    width: 60px;
+    height: 40px;
+}
+
+.shopping-cart img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+.cartCount,
+.shopping-cart img {
+    margin: 4px;
+    color: white;
+}

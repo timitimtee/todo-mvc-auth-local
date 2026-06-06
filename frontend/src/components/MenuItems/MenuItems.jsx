@@ -81,10 +81,6 @@ export default function MenuItems({ onAddItem }) {
             &#8250;
           </button>
         </div>
-        <div className="search-bar">
-          <span className="search-icon">&#128269;</span>
-          <input type="text" placeholder="Search" className="search-input" />
-        </div>
       </section>
       <div className="menu-section">
         {categories.map((cat) => (

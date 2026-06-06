@@ -1,0 +1,71 @@
+/* src/components/SignupModal/SignupModal.css */
+.signup-modal {
+    position: fixed;
+    inset: 0; /* covers the whole viewport */
+    z-index: 999;
+    background: #1a2e1a; /* your brand dark green — swap as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* THE RIPPLE: starts as a circle at the click point, expands to fill */
+    clip-path: circle(0% at var(--origin-x) var(--origin-y));
+    animation: ripple-open 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes ripple-open {
+    from {
+        clip-path: circle(0% at var(--origin-x) var(--origin-y));
+    }
+    to {
+        clip-path: circle(150% at var(--origin-x) var(--origin-y));
+    }
+}
+
+.signup-modal__content {
+    text-align: center;
+    color: #fff;
+    padding: 2rem;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: content-fade 0.3s ease 0.4s forwards; /* starts after ripple */
+}
+
+@keyframes content-fade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.signup-modal__content h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.signup-modal__content p {
+    opacity: 0.75;
+    margin-bottom: 1.5rem;
+}
+
+.signup-modal__btn {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: #fff;
+    color: #1a2e1a;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.signup-modal__btn:hover {
+    opacity: 0.85;
+}
+
+.signup-modal__hint {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    opacity: 0.4;
+}

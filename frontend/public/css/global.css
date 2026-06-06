@@ -6,11 +6,45 @@
 }
 
 body {
-    font-family: "Roboto", sans-serif;
+    font-family: "Cabin", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 400;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-normal);
     font-style: normal;
     font-variation-settings: "wdth" 100;
+}
+
+/* ─── Semantic elements ──────────────────────────── */
+h1 {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--text-heading);
+}
+
+h2 {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--text-heading);
+}
+
+h3 {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--text-heading);
+}
+
+p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-normal);
+    color: var(--text-body);
+}
+
+small {
+    font-size: var(--font-size-small);
 }
 
 /* ---- Fonts -------------------------------*/
@@ -48,84 +82,19 @@ body {
     --success: #2d6a4f;
     --warning: #c9973e;
     --error: #b85c3a;
-}
 
-/* ─── Background utilities ───────────────────────── */
-.bg-page {
-    background-color: var(--bg-page);
-}
-.bg-card {
-    background-color: var(--bg-card);
-}
-.bg-tint {
-    background-color: var(--bg-tint);
-}
-.bg-brand {
-    background-color: var(--brand-primary);
-}
-.bg-brand-dark {
-    background-color: var(--brand-darkest);
-}
-.bg-brand-mid {
-    background-color: var(--brand-mid);
-}
-.bg-brand-pale {
-    background-color: var(--brand-pale);
-}
-.bg-accent {
-    background-color: var(--accent);
-}
-.bg-accent-pale {
-    background-color: var(--accent-pale);
-}
-.bg-overlay {
-    background-color: var(--overlay);
-}
+    /* Typography */
+    --font-size-h1: 2rem;
+    --font-size-h2: 1.5rem;
+    --font-size-h3: 1.25rem;
+    --font-size-body: 1rem;
+    --font-size-small: 0.875rem;
+    --font-size-tiny: 0.75rem;
 
-/* ─── Text-color utilities ───────────────────────── */
-.text-heading {
-    color: var(--text-heading);
-}
-.text-body {
-    color: var(--text-body);
-}
-.text-muted {
-    color: var(--text-muted);
-}
-.text-disabled {
-    color: var(--text-disabled);
-}
-.text-inverse {
-    color: var(--text-inverse);
-}
-.text-brand {
-    color: var(--brand-primary);
-}
-.text-accent {
-    color: var(--accent);
-}
+    --font-weight-regular: 400;
+    --font-weight-bold: 800;
 
-/* ─── Border utilities ───────────────────────────── */
-.border-brand {
-    border-color: var(--border);
-}
-
-/* ─── Status utilities ───────────────────────────── */
-.bg-success {
-    background-color: var(--success);
-}
-.bg-warning {
-    background-color: var(--warning);
-}
-.bg-error {
-    background-color: var(--error);
-}
-.text-success {
-    color: var(--success);
-}
-.text-warning {
-    color: var(--warning);
-}
-.text-error {
-    color: var(--error);
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
 }

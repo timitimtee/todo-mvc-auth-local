@@ -5,6 +5,7 @@ import MenuItems from "../../MenuItems/MenuItems";
 import "./Homepage.css";
 import "../../DeliveryPickupPill/DeliveryPickupPill";
 import DeliveryPickupPill from "../../DeliveryPickupPill/DeliveryPickupPill";
+import heroImage from "./hero.jpg";
 
 export default function Homepage() {
   const [cartCount, setCartCount] = useState(0);
@@ -16,8 +17,13 @@ export default function Homepage() {
   return (
     <>
       <Nav cartCount={cartCount} />
-      <DeliveryPickupPill />
-      <MenuItems onAddItem={handleAddItem} />
+      <div className="hero-image-container">
+        <img src={heroImage}></img>
+      </div>
+      <div className="menu-wrapper">
+        <DeliveryPickupPill />
+        <MenuItems onAddItem={handleAddItem} />
+      </div>
       <OrderNow />
     </>
   );

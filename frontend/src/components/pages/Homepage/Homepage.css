@@ -1,0 +1,19 @@
+.hero-image-container {
+    height: 200px;
+    overflow: hidden;
+    margin: 0px 0 10px 0;
+}
+
+.hero-image-container img {
+    width: 100%;
+    height: 100%; /* ← add this */
+    object-fit: cover;
+    object-position: 20% 70%;
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+.menu-wrapper {
+    padding-left: 6px;
+    padding-right: 6px;
+}

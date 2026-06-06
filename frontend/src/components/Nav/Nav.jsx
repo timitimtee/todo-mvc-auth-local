@@ -16,7 +16,7 @@ export default function Nav({ cartCount }) {
           <Hamburger isActive={isOpen} onClick={() => setIsOpen((o) => !o)} />
         </div>
         <div className="logo-title-container">
-          <Logo />
+          {/* <Logo />*/}
           {/* <h1 className="title">Biofresh</h1>*/}
           <img className="logo-title" src={logoTitle}></img>
         </div>

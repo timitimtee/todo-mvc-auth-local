@@ -1,0 +1,301 @@
+/* src/components/SignupModal/SignupModal.css */
+.signup-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    clip-path: circle(0% at var(--origin-x) var(--origin-y));
+    animation: ripple-open 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes ripple-open {
+    from {
+        clip-path: circle(0% at var(--origin-x) var(--origin-y));
+    }
+    to {
+        clip-path: circle(150% at var(--origin-x) var(--origin-y));
+    }
+}
+
+.signup-modal--closing {
+    animation: ripple-close 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes ripple-close {
+    from {
+        clip-path: circle(150% at var(--origin-x) var(--origin-y));
+    }
+    to {
+        clip-path: circle(0% at var(--origin-x) var(--origin-y));
+    }
+}
+
+/* ── Card ── */
+.signup-modal__card {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    padding: 36px;
+    margin: 2rem auto;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: content-fade 0.3s ease 0.4s forwards;
+    /*border: 4px solid var(--brand-darkest);*/
+    border-radius: 10px;
+    box-shadow:
+        -3px -3px 7px #ffffff73,
+        2px 2px 5px rgba(94, 104, 121, 0.288);
+}
+
+/* ── Close button ── */
+.signup-modal__close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem;
+    border-radius: 50%;
+    transition:
+        background 0.15s,
+        color 0.15s;
+}
+
+.signup-modal__close-btn:hover {
+    background: #f3f4f6;
+    color: #111;
+}
+
+@keyframes content-fade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Title ── */
+.signup-modal__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #111;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* ── Error ── */
+.signup-modal__error {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* ── Google button ── */
+.signup-modal__google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    background: #fff;
+    color: #111;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.signup-modal__google-btn:hover {
+    background: var(--brand-pale);
+}
+
+/* ── OR divider ── */
+.signup-modal__divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+
+.signup-modal__divider::before,
+.signup-modal__divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+/* ── Form fields ── */
+.signup-modal__field {
+    margin-bottom: 1rem;
+}
+
+.signup-modal__field label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.4rem;
+}
+
+.signup-modal__field input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    color: #111;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+}
+
+.signup-modal__field input:focus {
+    border-color: #6366f1;
+}
+
+.signup-modal__field input::placeholder {
+    color: #9ca3af;
+}
+
+/* ── Password show/hide wrapper ── */
+.signup-modal__password-wrap {
+    position: relative;
+}
+
+.signup-modal__password-wrap input {
+    padding-right: 3rem;
+}
+
+.signup-modal__eye-btn {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.signup-modal__eye-btn:hover {
+    color: #6366f1;
+}
+
+/* ── Password rules box ── */
+.signup-modal__password-rules {
+    margin-top: 0.6rem;
+    background: #f0f2ff;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+}
+
+.signup-modal__password-rules p {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 0.4rem 0;
+}
+
+.signup-modal__password-rules ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.signup-modal__password-rules li {
+    font-size: 0.82rem;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.signup-modal__password-rules li::before {
+    content: "ℹ";
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+/* ── Newsletter checkbox ── */
+.signup-modal__checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+}
+
+.signup-modal__checkbox-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #4f46e5;
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.signup-modal__checkbox-row label {
+    font-size: 0.875rem;
+    color: #374151;
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+/* ── Submit button ── */
+.signup-modal__submit {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--brand-mid);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-bottom: 1.25rem;
+}
+
+.signup-modal__submit:hover {
+    background: var(--brand-primary);
+}
+
+/* ── Terms text ── */
+.signup-modal__terms {
+    font-size: 0.8rem;
+    color: #6b7280;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.signup-modal__terms a {
+    color: #4f46e5;
+    text-decoration: underline;
+}
+
+.signup-modal__terms a:hover {
+    color: #3730a3;
+}

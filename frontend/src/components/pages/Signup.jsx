@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../hooks/useUser";
 
 export default function Signup() {
   const [form, setForm] = useState({
@@ -11,23 +12,28 @@ export default function Signup() {
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
 
+  const { user } = useUser();
+  console.log("user from context:", user);
+
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    const data = await res.json();
-    if (data.errors) {
-      setErrors(data.errors);
-    } else {
-      navigate("/");
-    }
+    console.log("current user: ", user);
+
+    // e.preventDefault();
+    // const res = await fetch("/api/signup", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(form),
+    // });
+    // const data = await res.json();
+    // if (data.errors) {
+    //   setErrors(data.errors);
+    // } else {
+    //   navigate("/");
+    // }
   }
 
   return (

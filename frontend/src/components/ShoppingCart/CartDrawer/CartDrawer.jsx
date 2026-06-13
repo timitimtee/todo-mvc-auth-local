@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./CartDrawer.css";
-import scooterIcon from "../DeliveryPickupPill/icons8-scooter-100.png";
+import scooterIcon from "../../DeliveryPickupPill/icons8-scooter-100.png";
 
 export default function CartDrawer({ isOpen, onClose }) {
   const [closing, setClosing] = useState(false);
@@ -14,7 +14,9 @@ export default function CartDrawer({ isOpen, onClose }) {
   };
 
   return (
-    <div className={`cart-drawer ${isOpen && !closing ? "open" : ""} ${closing ? "closing" : ""}`}>
+    <div
+      className={`cart-drawer ${isOpen && !closing ? "open" : ""} ${closing ? "closing" : ""}`}
+    >
       <div className="cart-drawer-header">
         <div className="cart-header-title">
           <img src={scooterIcon} alt="delivery" />

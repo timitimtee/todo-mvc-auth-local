@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./ShoppingCart.css";
 import shoppingCart from "./icons8-shopping-bag.png";
 import SignInButton from "./SignInButton/SignInButton";
-import CartDrawer from "./CartDrawer";
+import CartDrawer from "./CartDrawer/CartDrawer";
 
 export default function ShoppingCart({ count }) {
   const [drawerOpen, setDrawerOpen] = useState(false);

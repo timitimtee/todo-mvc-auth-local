@@ -1,0 +1,188 @@
+.profile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Drop the dark backdrop the instant closing starts, so only the modal
+   slides out (no lingering grey layer during the slide). */
+.profile-overlay.closing {
+  background: transparent;
+}
+
+.profile-modal {
+  width: min(1000px, 92vw);
+  height: min(640px, 88vh);
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* No open transition -> snappy instant pop, just like CartDrawer. */
+  transform: translateX(0);
+}
+
+.profile-modal.closing {
+  /* Slide off to the right on close, same drawer effect as CartDrawer. */
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.profile-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.profile-close-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #444;
+  transition: background-color 0.15s;
+}
+
+.profile-close-btn:hover {
+  background-color: #e8e8e8;
+}
+
+.profile-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.profile-sidebar {
+  width: 200px;
+  border-right: 1px solid #e5e5e5;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-nav-item {
+  text-align: left;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.profile-nav-item:hover {
+  background-color: #f2f2f2;
+}
+
+.profile-nav-item.active {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.profile-logout {
+  /* Sits at the bottom of the Account panel, gap above to separate from
+     the last field (Phone). */
+  margin-top: 24px;
+  text-align: left;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #c0392b;
+  transition: background-color 0.15s;
+}
+
+.profile-logout:hover {
+  background-color: #fbeae8;
+}
+
+.profile-content {
+  flex: 1;
+  padding: 28px 32px;
+  overflow-y: auto;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.field-label {
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #9e9e9e;
+}
+
+.field-value {
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  color: #1a1a1a;
+}
+
+.field-empty {
+  color: #b8b8b8;
+  font-style: italic;
+}
+
+.panel-empty {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #9e9e9e;
+}
+
+/* On small screens go edge-to-edge: sidebar becomes a top row of pills. */
+@media (max-width: 600px) {
+  .profile-modal {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .profile-body {
+    flex-direction: column;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid #e5e5e5;
+    overflow-x: auto;
+  }
+}

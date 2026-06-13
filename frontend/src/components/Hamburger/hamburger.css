@@ -17,3 +17,4 @@
 .hamburger-custom.is-active .hamburger-inner::after {
     background-color: var(--brand-primary); /* active color */
 }
+

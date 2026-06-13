@@ -24,6 +24,7 @@
     background-color: var(--brand-mid);
     width: 55px;
     height: 35px;
+    cursor: pointer;
 }
 
 .shopping-cart img {

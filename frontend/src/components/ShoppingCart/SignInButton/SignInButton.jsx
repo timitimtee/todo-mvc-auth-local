@@ -1,10 +1,11 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignInButton.css";
-// import SignupModal from "../../SignupModal/SignupModal";
+import { useUser } from "../../../hooks/useUser";
+import profileIcon from "./icons8-profile-96.png";
 
 export default function SignInButton() {
   const navigate = useNavigate();
+  const { user } = useUser();
 
   function handleClick(e) {
     navigate("/signup");
@@ -12,9 +13,13 @@ export default function SignInButton() {
 
   return (
     <>
-      <a className="sign-in-button" onClick={handleClick}>
-        Sign In
-      </a>
+      {user ? (
+        <img src={profileIcon} alt="profile" />
+      ) : (
+        <a className="sign-in-button" onClick={handleClick}>
+          Sign In
+        </a>
+      )}
     </>
   );
 }

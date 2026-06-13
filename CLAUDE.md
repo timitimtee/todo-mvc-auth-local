@@ -1,7 +1,8 @@
 ## Response Style
 Before every response:
 1. Read `.claude/skills/productivity/grill-me/SKILL.md` and apply it to understand/process the request
-2. Read `.claude/skills/productivity/caveman/SKILL.md` and apply that style when writing the response
+2. Read `.claude/skills/productivity/implement-ready/SKILL.md` and apply it before any code, recommendation, or design
+3. Read `.claude/skills/productivity/caveman/SKILL.md` and apply that style when writing the response
 
 ## Developer Context & Collaboration Rules
 

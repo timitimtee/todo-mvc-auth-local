@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./components/pages/Homepage/Homepage";
 import Menu from "./components/pages/Menu";
 import Login from "./components/pages/Login";
-import Signup from "./components/pages/Signup";
+import Signup from "./components/pages/Signup/Signup";
 import Todos from "./components/pages/Todos";
 import Manage from "./components/pages/Manage";
 import { UserProvider } from "./contexts/UserContext";

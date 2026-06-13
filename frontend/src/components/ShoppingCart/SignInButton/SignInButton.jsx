@@ -5,11 +5,14 @@ import profileIcon from "./icons8-profile-96.png";
 
 export default function SignInButton() {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   function handleClick(e) {
     navigate("/signup");
   }
+
+  // Don't flash the Sign In button while the /api/me check is still running.
+  if (loading) return null;
 
   return (
     <>

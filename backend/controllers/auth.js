@@ -2,6 +2,15 @@ const passport = require('passport')
 const validator = require('validator')
 const User = require('../models/User')
 
+exports.getMe = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json(null)
+  }
+  // Whitelist safe fields only — never expose password hash or card number.
+  const { _id, userName, email, displayName, firstName, image, role } = req.user
+  return res.json({ _id, userName, email, displayName, firstName, image, role })
+}
+
 exports.postLogin = (req, res, next) => {
   const validationErrors = []
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' })

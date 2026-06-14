@@ -73,6 +73,16 @@
     border-radius: 10px;
 }
 
+/* Pin the category bar to the top once you scroll past it. z-index:10 keeps it
+   above the food list (which has positioned images) but well below the Nav menu
+   (101) and all modals/overlays (>=999), so it never covers them. */
+.menu-browse {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #fff;
+}
+
 .category-carousel {
     display: flex;
     gap: 12px;

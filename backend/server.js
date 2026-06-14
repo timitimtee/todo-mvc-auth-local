@@ -30,6 +30,12 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    cookie: {
+      httpOnly: true, // JS can't read the cookie -> blocks XSS cookie theft
+      secure: process.env.NODE_ENV === "production", // HTTPS-only in prod
+      sameSite: "lax", // blocks cross-site POST/PUT/DELETE -> CSRF hardening
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    },
   }),
 );
 

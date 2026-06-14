@@ -1,0 +1,168 @@
+/* dim backdrop that centers the modal box */
+.timing-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.timing-overlay.open {
+  opacity: 1;
+}
+
+.timing-overlay.closing {
+  opacity: 0;
+}
+
+.timing-modal {
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 48px);
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(8px);
+  transition: transform 0.25s ease;
+}
+
+.timing-overlay.open .timing-modal {
+  transform: translateY(0);
+}
+
+/* ---- header (title + bottom border, like the reference) ---- */
+.timing-header {
+  text-align: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.timing-header span {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* ---- body ---- */
+.timing-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 20px 16px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* each radio row: label left, radio right, divider under it */
+.timing-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid #ededed;
+  cursor: pointer;
+}
+
+.timing-option-label {
+  font-size: 15px;
+  color: #9e9e9e; /* greyed when not selected, mirrors the reference */
+}
+
+.timing-option.selected .timing-option-label {
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+/* native radio recolored to brand red */
+.timing-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #d80c18;
+  cursor: pointer;
+}
+
+/* ---- schedule (date + time selects) ---- */
+.timing-schedule {
+  padding-top: 14px;
+}
+
+.timing-field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 14px 0 6px;
+}
+
+.timing-select {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.timing-select:focus {
+  outline: none;
+  border-color: #d80c18;
+}
+
+/* ---- footer (top border + the two stacked buttons) ---- */
+.timing-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.timing-footer button {
+  width: 100%;
+  padding: 13px;
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.timing-confirm {
+  border: none;
+  background: #d80c18;
+  color: #ffffff;
+}
+
+.timing-confirm:hover {
+  background: #b80a14;
+}
+
+.timing-cancel {
+  border: 1px solid #d9d9d9;
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+.timing-cancel:hover {
+  background: #f3f3f3;
+}
+
+@media (max-width: 420px) {
+  .timing-modal {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}

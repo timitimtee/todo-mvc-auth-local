@@ -54,6 +54,8 @@ In production, `server.js` serves the Vite build from `dist/`.
 - One file per page/feature
 - Fetch data from Express API using `fetch()` calls to backend endpoints
 - Handle auth state via API responses (redirect on 401, etc.)
+- `DeliveryPickupPill/` — delivery vs pickup toggle + the location/time selection rows. Owns the order-timing state `{ mode, date, time }` and renders the time row text from it.
+  - `OrderTimingModal/` — controlled center modal (overlay) for choosing ASAP vs Schedule-for-later (+ Date/Time `<select>`s). Parent passes `value` and gets the new selection via `onConfirm`; Cancel/overlay click discards the draft. `ASAP_MINUTES` and the date/time option lists are hardcoded with `TODO(backend)` — meant to come from the admin dashboard later.
 
 ### State / Auth context — `frontend/src/contexts/UserContext.jsx`
 - `UserProvider` is the single source of truth for "who is logged in". Wraps the app in `App.jsx`.

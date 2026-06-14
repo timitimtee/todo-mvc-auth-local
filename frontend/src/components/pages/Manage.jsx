@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import UploadWidget from '../UploadWidget/UploadWidget'
 
 const STATUS_OPTIONS = ['pending', 'confirmed', 'preparing', 'ready', 'delivered']
 
@@ -11,6 +12,47 @@ const EMPTY_ITEM = {
   menu_item_image: '',
 }
 
+// Small ~110px rounded square showing the current image, or a neutral
+// placeholder when none is set yet. Mirrors the look of .menu-item-image-wrapper
+// (object-fit: cover) used on the public menu so admins see the real crop.
+function imagePreview(url) {
+  const box = {
+    width: 110,
+    height: 110,
+    flexShrink: 0,
+    borderRadius: 10,
+    background: '#f5f5f5',
+    overflow: 'hidden',
+  }
+  if (url) {
+    return (
+      <div style={box}>
+        <img
+          src={url}
+          alt="menu item preview"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      </div>
+    )
+  }
+  return (
+    <div
+      style={{
+        ...box,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#999',
+        fontSize: 12,
+        textAlign: 'center',
+        border: '1px dashed #ccc',
+      }}
+    >
+      No image yet
+    </div>
+  )
+}
+
 export default function Manage() {
   const [tab, setTab] = useState('menu')
   const [menuItems, setMenuItems] = useState([])
@@ -19,6 +61,7 @@ export default function Manage() {
   const [newItem, setNewItem] = useState(EMPTY_ITEM)
   const [showAddForm, setShowAddForm] = useState(false)
   const [error, setError] = useState(null)
+  const [formError, setFormError] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -40,30 +83,56 @@ export default function Manage() {
     setOrders(await res.json())
   }
 
+  // Returns a finite Number for a price field, or null if the input is empty /
+  // non-numeric. Centralised so add + edit validate the same way and we never
+  // ship NaN (JSON serialises NaN as null -> Mongoose "price required" 500).
+  function parsePrice(value) {
+    const str = String(value).trim()
+    if (str === '') return null
+    const num = Number(str)
+    return Number.isFinite(num) ? num : null
+  }
+
   async function saveEdit(id) {
+    const price = parsePrice(editingItem.menu_item_price)
+    if (price === null) {
+      setFormError('Enter a valid price (a number).')
+      return
+    }
     const res = await fetch(`/api/admin/menu-items/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(editingItem),
+      body: JSON.stringify({ ...editingItem, menu_item_price: price }),
     })
     if (res.ok) {
       const updated = await res.json()
       setMenuItems(menuItems.map(i => (i._id === id ? updated : i)))
       setEditingItem(null)
+      setFormError(null)
+    } else {
+      setFormError('Failed to save changes. Try again.')
     }
   }
 
   async function addItem() {
+    const price = parsePrice(newItem.menu_item_price)
+    if (price === null) {
+      setFormError('Enter a valid price (a number).')
+      return
+    }
     const res = await fetch('/api/admin/menu-items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...newItem, menu_item_price: Number(newItem.menu_item_price) }),
+      body: JSON.stringify({ ...newItem, menu_item_price: price }),
     })
     if (res.ok) {
       const created = await res.json()
       setMenuItems([...menuItems, created])
       setNewItem(EMPTY_ITEM)
       setShowAddForm(false)
+      setFormError(null)
+    } else {
+      setFormError('Failed to add item. Check the fields and try again.')
     }
   }
 
@@ -109,16 +178,30 @@ export default function Manage() {
           {showAddForm && (
             <div style={{ border: '1px solid #ccc', padding: '1rem', marginBottom: '1rem', borderRadius: 4 }}>
               <h3 style={{ marginTop: 0 }}>New Menu Item</h3>
-              {['menu_item_name', 'menu_item_description', 'menu_item_category', 'menu_item_price', 'menu_item_image'].map(field => (
+              {['menu_item_name', 'menu_item_description', 'menu_item_category', 'menu_item_price'].map(field => (
                 <div key={field} style={{ marginBottom: '0.5rem' }}>
                   <label style={{ display: 'block', fontSize: 12, marginBottom: 2 }}>{field}</label>
                   <input
+                    type={field === 'menu_item_price' ? 'number' : 'text'}
+                    min={field === 'menu_item_price' ? '0' : undefined}
+                    step={field === 'menu_item_price' ? '0.01' : undefined}
                     value={newItem[field]}
                     onChange={e => setNewItem({ ...newItem, [field]: e.target.value })}
                     style={{ width: '100%', padding: '0.3rem', boxSizing: 'border-box' }}
                   />
                 </div>
               ))}
+              <div style={{ marginBottom: '0.5rem' }}>
+                <label style={{ display: 'block', fontSize: 12, marginBottom: 2 }}>menu_item_image</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  {imagePreview(newItem.menu_item_image)}
+                  <UploadWidget
+                    onUploadSuccess={info => setNewItem(prev => ({ ...prev, menu_item_image: info.secure_url }))}
+                    onUploadError={() => setFormError('Image upload failed. Check your Cloudinary preset is unsigned.')}
+                  />
+                </div>
+              </div>
+              {formError && <p style={{ color: 'red', fontSize: 13, margin: '0 0 0.5rem' }}>{formError}</p>}
               <button onClick={addItem} style={{ marginTop: '0.5rem', padding: '0.4rem 1rem' }}>Save</button>
             </div>
           )}
@@ -127,18 +210,32 @@ export default function Manage() {
             <div key={item._id} style={{ border: '1px solid #ccc', padding: '1rem', marginBottom: '0.75rem', borderRadius: 4 }}>
               {editingItem?._id === item._id ? (
                 <div>
-                  {['menu_item_name', 'menu_item_description', 'menu_item_category', 'menu_item_price', 'menu_item_image'].map(field => (
+                  {['menu_item_name', 'menu_item_description', 'menu_item_category', 'menu_item_price'].map(field => (
                     <div key={field} style={{ marginBottom: '0.5rem' }}>
                       <label style={{ display: 'block', fontSize: 12, marginBottom: 2 }}>{field}</label>
                       <input
+                        type={field === 'menu_item_price' ? 'number' : 'text'}
+                        min={field === 'menu_item_price' ? '0' : undefined}
+                        step={field === 'menu_item_price' ? '0.01' : undefined}
                         value={editingItem[field]}
                         onChange={e => setEditingItem({ ...editingItem, [field]: e.target.value })}
                         style={{ width: '100%', padding: '0.3rem', boxSizing: 'border-box' }}
                       />
                     </div>
                   ))}
+                  <div style={{ marginBottom: '0.5rem' }}>
+                    <label style={{ display: 'block', fontSize: 12, marginBottom: 2 }}>menu_item_image</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      {imagePreview(editingItem.menu_item_image)}
+                      <UploadWidget
+                        onUploadSuccess={info => setEditingItem(prev => ({ ...prev, menu_item_image: info.secure_url }))}
+                        onUploadError={() => setFormError('Image upload failed. Check your Cloudinary preset is unsigned.')}
+                      />
+                    </div>
+                  </div>
+                  {formError && <p style={{ color: 'red', fontSize: 13, margin: '0 0 0.5rem' }}>{formError}</p>}
                   <button onClick={() => saveEdit(item._id)} style={{ marginRight: '0.5rem', padding: '0.3rem 0.8rem' }}>Save</button>
-                  <button onClick={() => setEditingItem(null)} style={{ padding: '0.3rem 0.8rem' }}>Cancel</button>
+                  <button onClick={() => { setEditingItem(null); setFormError(null) }} style={{ padding: '0.3rem 0.8rem' }}>Cancel</button>
                 </div>
               ) : (
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

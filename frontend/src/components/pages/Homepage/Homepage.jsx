@@ -5,7 +5,7 @@ import MenuItems from "../../MenuItems/MenuItems";
 import "./Homepage.css";
 import "../../DeliveryPickupPill/DeliveryPickupPill";
 import DeliveryPickupPill from "../../DeliveryPickupPill/DeliveryPickupPill";
-import heroImage from "./hero.jpg";
+import heroImage from "./biofresh-hero-3.jpg";
 
 export default function Homepage() {
   const [cartCount, setCartCount] = useState(0);
@@ -24,7 +24,7 @@ export default function Homepage() {
         <DeliveryPickupPill />
         <MenuItems onAddItem={handleAddItem} />
       </div>
-      <OrderNow />
+      {/* <OrderNow />*/}
     </>
   );
 }

@@ -104,7 +104,7 @@ export default function MenuItems({ onAddItem }) {
                   <div className="menu-item-image-wrapper">
                     <img
                       src={item.menu_item_image}
-                      alt={item.menu_item_name}
+                      alt="placeholder"
                       className="menu-item-image"
                     />
                   </div>

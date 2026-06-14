@@ -20,26 +20,33 @@ module.exports = {
   },
   markComplete: async (req, res) => {
     try {
-      await Todo.findOneAndUpdate({ _id: req.body.todoIdFromJSFile }, { completed: true })
+      // Scope by userId so a user can only mutate their OWN todo (prevents IDOR).
+      const updated = await Todo.findOneAndUpdate({ _id: req.body.todoIdFromJSFile, userId: req.user.id }, { completed: true })
+      if (!updated) return res.status(404).json({ error: 'Not found' })
       res.json('Marked Complete')
     } catch (err) {
-      console.log(err)
+      console.error(err)
+      res.status(500).json({ error: 'Server error' })
     }
   },
   markIncomplete: async (req, res) => {
     try {
-      await Todo.findOneAndUpdate({ _id: req.body.todoIdFromJSFile }, { completed: false })
+      const updated = await Todo.findOneAndUpdate({ _id: req.body.todoIdFromJSFile, userId: req.user.id }, { completed: false })
+      if (!updated) return res.status(404).json({ error: 'Not found' })
       res.json('Marked Incomplete')
     } catch (err) {
-      console.log(err)
+      console.error(err)
+      res.status(500).json({ error: 'Server error' })
     }
   },
   deleteTodo: async (req, res) => {
     try {
-      await Todo.findOneAndDelete({ _id: req.body.todoIdFromJSFile })
+      const deleted = await Todo.findOneAndDelete({ _id: req.body.todoIdFromJSFile, userId: req.user.id })
+      if (!deleted) return res.status(404).json({ error: 'Not found' })
       res.json('Deleted It')
     } catch (err) {
-      console.log(err)
+      console.error(err)
+      res.status(500).json({ error: 'Server error' })
     }
   },
 }

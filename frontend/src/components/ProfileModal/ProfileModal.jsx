@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./ProfileModal.css";
 import { useUser } from "../../hooks/useUser";
-import SearchLocations from "../SearchLocations/SearchLocations";
+import Favorites from "../Favorites/Favorites";
 
 // Sections shown in the left nav rail. `key` drives which panel renders,
 // `label` is what the user sees. Add a section here = one new entry + one panel.
@@ -118,19 +118,9 @@ function OrdersPanel() {
 }
 
 function FavoritesPanel() {
-  // POC: hold only the single most-recently picked address, in memory.
-  // Each new pick from the search input replaces it. Not persisted yet.
-  const [location, setLocation] = useState(null);
-
   return (
     <div className="panel">
-      <SearchLocations onSelect={setLocation} />
-      <div className="profile-field">
-        <span className="field-label">Preferred location</span>
-        <span className={`field-value ${location ? "" : "field-empty"}`}>
-          {location || "No location selected yet"}
-        </span>
-      </div>
+      <Favorites />
     </div>
   );
 }

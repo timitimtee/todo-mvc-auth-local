@@ -1,0 +1,306 @@
+/* Delivery address modal — same shell as OrderTimingModal.css, plus the
+   address-picker body bits. */
+
+.da-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.da-overlay.open {
+  opacity: 1;
+}
+
+.da-overlay.closing {
+  opacity: 0;
+}
+
+/* Google appends the autocomplete dropdown (.pac-container, z-index 1000) to
+   <body>; lift it above this overlay (1100) so suggestions are visible. */
+.pac-container {
+  z-index: 1300 !important;
+}
+
+.da-modal {
+  width: 390px;
+  max-width: calc(100vw - 32px);
+  height: min(680px, calc(100vh - 48px));
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(8px);
+  transition: transform 0.25s ease;
+}
+
+.da-overlay.open .da-modal {
+  transform: translateY(0);
+}
+
+/* ---- header: back | title | close, with bottom border ---- */
+.da-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.da-title {
+  flex: 1;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.da-icon-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 16px;
+  color: #444;
+  transition: background-color 0.15s;
+}
+
+.da-icon-btn:hover {
+  background: #f0f0f0;
+}
+
+/* keep the title centered when there's no back button */
+.da-header-spacer {
+  width: 32px;
+}
+
+/* ---- body ---- */
+.da-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* search input wrapper (SearchLocations) — pill look */
+.da-body .search-locations {
+  position: relative;
+  width: 100%;
+}
+
+.da-body .search-locations-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 42px 13px 16px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 999px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.da-body .search-locations-input:focus {
+  border-color: #1a1a1a;
+}
+
+/* ---- saved address list (logged in) ---- */
+.da-saved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.da-saved-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.da-saved-card:hover {
+  background: #f3f3f3;
+  border-color: #ddd;
+}
+
+.da-saved-pin {
+  color: #1a1a1a;
+  flex-shrink: 0;
+}
+
+.da-saved-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.da-saved-address {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.da-saved-comment {
+  font-size: 12px;
+  color: #9e9e9e;
+}
+
+.da-saved-chevron {
+  font-size: 22px;
+  color: #b8b8b8;
+  flex-shrink: 0;
+}
+
+/* ---- signed-out empty state (Image #7) ---- */
+.da-signedout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+  color: #555;
+  padding: 24px 0;
+}
+
+.da-signedout-title {
+  margin: 8px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.da-signedout-text {
+  margin: 0;
+  max-width: 280px;
+  font-size: 13px;
+  color: #777;
+}
+
+/* Constrain the full-width shared Google button so it reads as a button,
+   not a page-wide bar, inside the centered empty state. */
+.da-signin-wrap {
+  margin-top: 14px;
+  width: 100%;
+  max-width: 240px;
+}
+
+/* ---- confirm view (Image #9) ---- */
+.da-confirm-address {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0 16px;
+  border-bottom: 1px solid #ededed;
+}
+
+.da-confirm-address-text {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.da-field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 18px 0 8px;
+}
+
+.da-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.da-input:focus {
+  border-color: #1a1a1a;
+}
+
+/* ---- confirm footer: stacked buttons, top border ---- */
+.da-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 16px;
+}
+
+.da-confirm-btn,
+.da-cancel-btn {
+  width: 100%;
+  padding: 13px;
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.da-confirm-btn {
+  border: none;
+  background: #c0392b;
+  color: #ffffff;
+}
+
+.da-confirm-btn:hover {
+  background: #a93226;
+}
+
+.da-cancel-btn {
+  border: 1px solid #d9d9d9;
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+.da-cancel-btn:hover {
+  background: #f3f3f3;
+}
+
+@media (max-width: 420px) {
+  .da-modal {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}

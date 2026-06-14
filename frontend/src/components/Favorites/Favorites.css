@@ -1,0 +1,288 @@
+/* Favorites address book. Light theme to match the host ProfileModal
+   (white surface, Poppins, #1a1a1a text), with the orange CTA + red clear
+   button taken from the reference mockups. */
+
+.fav {
+  font-family: "Poppins", sans-serif;
+}
+
+/* ---- Empty state ------------------------------------------------------ */
+.fav-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 0;
+  gap: 14px;
+}
+
+.fav-empty-icon {
+  color: #c4c4c4;
+}
+
+.fav-empty-text {
+  margin: 0;
+  font-size: 14px;
+  color: #9e9e9e;
+}
+
+/* ---- Orange call-to-action ------------------------------------------- */
+.fav-add-btn {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  background: #e07e1e;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.15s;
+}
+
+.fav-add-btn:hover {
+  background: #c96d14;
+}
+
+.fav-add-plus {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ---- Saved list ------------------------------------------------------- */
+.fav-section-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #9e9e9e;
+  margin-bottom: 10px;
+}
+
+.fav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.fav-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.fav-card:hover {
+  background: #f3f3f3;
+  border-color: #ddd;
+}
+
+.fav-card-pin {
+  color: #1a1a1a;
+  flex-shrink: 0;
+}
+
+.fav-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.fav-card-address {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.fav-card-comment {
+  font-size: 12px;
+  color: #9e9e9e;
+}
+
+.fav-card-chevron {
+  font-size: 22px;
+  color: #b8b8b8;
+  flex-shrink: 0;
+}
+
+/* ---- Add / edit form -------------------------------------------------- */
+.fav-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.fav-field-label {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #9e9e9e;
+  margin-bottom: 8px;
+}
+
+.fav-field-label:not(:first-child) {
+  margin-top: 20px;
+}
+
+/* search input wrapper from SearchLocations */
+.search-locations {
+  position: relative;
+  width: 100%;
+}
+
+.search-locations-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 42px 12px 14px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-locations-input:focus {
+  border-color: #e07e1e;
+}
+
+/* Google appends the autocomplete suggestions dropdown (.pac-container) to
+   <body> with z-index 1000. The profile modal overlay is z-index 1100, so the
+   dropdown renders BEHIND the modal and looks like "nothing happens". Lift it
+   above the modal. Global rule (Google's element is outside our tree). */
+.pac-container {
+  z-index: 1300 !important;
+}
+
+.search-locations-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9e9e9e;
+  pointer-events: none;
+}
+
+.search-locations-clear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: #e0392b;
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-locations-clear:hover {
+  background: #c32f23;
+}
+
+.fav-comment {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.15s;
+}
+
+.fav-comment:focus {
+  border-color: #e07e1e;
+}
+
+.fav-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+  align-items: center;
+}
+
+.fav-btn-primary {
+  margin-left: auto;
+  border: none;
+  cursor: pointer;
+  background: #e07e1e;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 22px;
+  border-radius: 10px;
+  transition: background-color 0.15s;
+}
+
+.fav-btn-primary:hover {
+  background: #c96d14;
+}
+
+.fav-btn-primary:disabled {
+  background: #e6c6a3;
+  cursor: not-allowed;
+}
+
+.fav-btn-ghost {
+  border: 1px solid #ddd;
+  background: #ffffff;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  padding: 11px 18px;
+  border-radius: 10px;
+  transition: background-color 0.15s;
+}
+
+.fav-btn-ghost:hover {
+  background: #f2f2f2;
+}
+
+.fav-btn-danger {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #c0392b;
+  padding: 11px 14px;
+  border-radius: 10px;
+  transition: background-color 0.15s;
+}
+
+.fav-btn-danger:hover {
+  background: #fbeae8;
+}

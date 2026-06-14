@@ -11,6 +11,12 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, unique: true, sparse: true },
   password: String,
   user_location: { type: String },
+  // Saved delivery addresses. Embedded array (same pattern as user_cart) so
+  // each entry gets its own _id for edit/delete. Absent until the first
+  // $push — new users (incl. Google sign-ups) need no special handling.
+  user_locations: [
+    { address: { type: String, required: true }, comment: { type: String } },
+  ],
   user_cart: [{ item_id: { type: String }, quantity: { type: Number } }],
   user_credit_card_number: { type: String },
   role: { type: String, enum: ["user", "admin"], default: "user" },

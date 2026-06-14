@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./DeliveryPickupPill.css";
 import OrderTimingModal, { ASAP } from "./OrderTimingModal/OrderTimingModal";
+import DeliveryAddressModal from "./DeliveryAddressModal/DeliveryAddressModal";
+import { useUser } from "../../hooks/useUser";
 import scooterIcon from "./icons8-scooter-100.png";
 import bagIcon from "./icons8-shopping-bag-100.png";
 import locationIcon from "./icons8-location-100.png";
@@ -62,14 +64,62 @@ function buildTimingText(orderType, timing) {
     : `Pickup ${when} at ${timing.time}`;
 }
 
+// localStorage key for the active delivery address when logged out.
+const DELIVERY_ADDR_KEY = "deliveryAddress";
+
+// Pickup is a single fixed store location — hardcoded text + its Google Maps
+// link (opened in a new tab when the row is clicked in pickup mode).
+const PICKUP_LOCATION_TEXT = "Pickup at Strada Francesco Griselini 2, Timișoara";
+const PICKUP_MAPS_URL =
+  "https://www.google.com/maps/place//data=!4m2!3m1!1s0x4745678025a4a945:0x8a7ea0a1c5b61adb?sa=X&ved=1t:8290&ictx=111";
+
+// "Delivery to <address>, <comment>" — the active-address row text (Image #10).
+function buildDeliveryText(addr) {
+  if (!addr || !addr.address) return "Confirm you're in delivery range";
+  return `Delivery to ${addr.address}${addr.comment ? `, ${addr.comment}` : ""}`;
+}
+
 function DeliveryPickupPill() {
+  const { user } = useUser();
   const [selected, setSelected] = useState("delivery"); // "delivery" | "pickup"
   const [modalOpen, setModalOpen] = useState(false);
+  const [addressModalOpen, setAddressModalOpen] = useState(false);
+  // Active delivery address shown in the location row. { address, comment } | null.
+  const [deliveryAddress, setDeliveryAddress] = useState(null);
   const [timing, setTiming] = useState({
     mode: ASAP,
     date: "Today",
     time: "6:30 PM",
   });
+
+  // Load the active address on mount / when auth changes.
+  // Logged in: first saved address from the DB. Logged out: localStorage.
+  useEffect(() => {
+    if (user) {
+      let cancelled = false;
+      (async () => {
+        const res = await fetch("/api/locations");
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (data.locations && data.locations.length > 0) {
+          setDeliveryAddress(data.locations[0]);
+        }
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }
+    // logged out -> read the persisted address from localStorage
+    const stored = localStorage.getItem(DELIVERY_ADDR_KEY);
+    if (stored) setDeliveryAddress(JSON.parse(stored));
+  }, [user]);
+
+  // Called when the modal confirms an address. Persist to localStorage when
+  // logged out (the modal already POSTed to the DB when logged in).
+  const handleAddressConfirm = (entry) => {
+    setDeliveryAddress(entry);
+    if (!user) localStorage.setItem(DELIVERY_ADDR_KEY, JSON.stringify(entry));
+  };
 
   return (
     <div className="delivery-pickup-wrapper">
@@ -90,9 +140,20 @@ function DeliveryPickupPill() {
         </div>
       </div>
 
-      <div className="location-container selection-row">
+      <div
+        className="location-container selection-row"
+        onClick={() =>
+          selected === "pickup"
+            ? window.open(PICKUP_MAPS_URL, "_blank", "noopener,noreferrer")
+            : setAddressModalOpen(true)
+        }
+      >
         <img src={locationIcon} alt="location" />
-        <span>Confirm you're in delivery range</span>
+        <span>
+          {selected === "pickup"
+            ? PICKUP_LOCATION_TEXT
+            : buildDeliveryText(deliveryAddress)}
+        </span>
         <span className="arrow">&#62;</span>
       </div>
 
@@ -113,6 +174,12 @@ function DeliveryPickupPill() {
         timeOptions={TIME_OPTIONS}
         onConfirm={setTiming}
         onClose={() => setModalOpen(false)}
+      />
+
+      <DeliveryAddressModal
+        isOpen={addressModalOpen}
+        onConfirm={handleAddressConfirm}
+        onClose={() => setAddressModalOpen(false)}
       />
     </div>
   );

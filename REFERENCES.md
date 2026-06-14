@@ -13,6 +13,7 @@ In production, `server.js` serves the Vite build from `dist/`.
 ### Controllers — `backend/controllers/todos.js`
 - One exported function per route action, named after what it does (`getTodos`, `createTodo`)
 - Always `try/catch`, log errors, respond with `res.json()`
+- `controllers/locations.js` — saved delivery addresses CRUD, same shape as todos but operates on the embedded `req.user.user_locations` array (`$push`/positional `$set`/`$pull`). Returns the updated `{ locations }` list.
 - Auth controller (`controllers/auth.js`) uses passport callbacks and returns `{ success: true }` or `{ errors: [...] }`
 - `getMe` in `controllers/auth.js` is the "who am I" endpoint: `req.isAuthenticated()` → returns a **whitelisted** user object (never `password` or `user_credit_card_number`), else `401` + `null`
 
@@ -20,6 +21,7 @@ In production, `server.js` serves the Vite build from `dist/`.
 - Explicit types + `required` validation on every field
 - No business logic — data shape only
 - Exception: `User.js` may include password hashing hooks and instance methods
+- `User.user_locations` — embedded array of saved delivery addresses `[{ address, comment }]` (same pattern as `user_cart`). Each entry gets a Mongo `_id` used for edit/delete. Distinct from the unused singular `user_location` String.
 
 ### Routes — `backend/routes/todos.js`
 - Import controller, map HTTP verb + path to controller function
@@ -28,6 +30,7 @@ In production, `server.js` serves the Vite build from `dist/`.
 - `routes/main.js` → auth endpoints (`/me`, `/login`, `/logout`, `/signup`), mounted at `/api`
 - `routes/todos.js` → todo CRUD endpoints (`/todos/*`)
 - `routes/auth.js` → Google OAuth endpoints, mounted at `/auth` (`/auth/google`, `/auth/google/callback`)
+- `routes/locations.js` → saved-address CRUD (`GET /`, `POST /addLocation`, `PUT /updateLocation`, `DELETE /deleteLocation`), all `ensureAuth`, mounted at `/api/locations`
 
 ### Middleware — `backend/middleware/auth.js`
 - Single responsibility per function
@@ -56,6 +59,7 @@ In production, `server.js` serves the Vite build from `dist/`.
 - Handle auth state via API responses (redirect on 401, etc.)
 - `DeliveryPickupPill/` — delivery vs pickup toggle + the location/time selection rows. Owns the order-timing state `{ mode, date, time }` and renders the time row text from it.
   - `OrderTimingModal/` — controlled center modal (overlay) for choosing ASAP vs Schedule-for-later (+ Date/Time `<select>`s). Parent passes `value` and gets the new selection via `onConfirm`; Cancel/overlay click discards the draft. `ASAP_MINUTES` and the date/time option lists are hardcoded with `TODO(backend)` — meant to come from the admin dashboard later.
+  - `DeliveryAddressModal/` — controlled center modal (same shell as OrderTimingModal) opened by clicking the location row when Delivery is selected. Reuses `SearchLocations` for the address search. Two views: **browse** (search + saved-address list when logged in, or sign-in prompt when logged out) and **confirm** (address + "Additional details" → the single `comment` field). Persists via `/api/locations` when logged in, else `localStorage` key `deliveryAddress`. Hands the chosen `{ address, comment }` up via `onConfirm`; the pill shows it as "Delivery to …". On load the pill seeds the active address from the first `/api/locations` entry (logged in) or localStorage (logged out).
 
 ### State / Auth context — `frontend/src/contexts/UserContext.jsx`
 - `UserProvider` is the single source of truth for "who is logged in". Wraps the app in `App.jsx`.

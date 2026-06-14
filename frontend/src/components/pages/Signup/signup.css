@@ -1,25 +1,4 @@
-/* ── Google button ── */
-.signup-modal__google-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #d1d5db;
-    border-radius: 999px;
-    background: #fff;
-    color: #111;
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.15s;
-}
-
-.signup-modal__google-btn:hover {
-    background: var(--brand-pale);
-}
+/* Google button styles now live in GoogleSignInButton.css (shared component). */
 
 .signup-form-wrapper,
 .inputs-wrapper {

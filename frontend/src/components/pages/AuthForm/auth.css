@@ -1,4 +1,4 @@
-/* Google button styles now live in GoogleSignInButton.css (shared component). */
+/* Google button styles live in GoogleSignInButton.css (shared component). */
 
 /* ─── Page centerer: puts the card dead-center, both axes ─────────────── */
 .signup-form-wrapper {
@@ -13,6 +13,7 @@
 
 /* ─── The card itself ────────────────────────────────────────────────── */
 .signup-card {
+    position: relative;         /* anchor for the absolute back button */
     display: flex;
     flex-direction: column;
     align-items: stretch;       /* children fill width so controls line up */
@@ -32,6 +33,37 @@
     width: 100%;
 }
 
+/* ─── Back button: top-left corner (universal back convention) ────────── */
+.auth-back {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;                /* full tap target even though the icon is small */
+    height: 44px;
+
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+}
+
+.auth-back:hover {
+    color: var(--brand-primary);
+    background: var(--bg-tint);
+}
+
+/* logo link wrapper — keep it block so the inner .logo can center the img */
+.logo-link {
+    display: block;
+    text-decoration: none;
+}
+
 /* logo sits at the top, centered (card stretches children, so center the img) */
 .signup-card .logo {
     display: flex;
@@ -41,6 +73,32 @@
 
 .signup-card .logo img {
     height: 56px;   /* a touch bigger than the 40px nav default — it's the hero here */
+}
+
+/* ─── Tabs: switch between Log in / Create account ───────────────────── */
+.auth-tabs {
+    display: flex;
+    width: 100%;
+}
+
+.auth-tab {
+    flex: 1;                    /* two equal halves */
+    min-height: 44px;          /* ergonomic tap target */
+    padding: 0.5rem 0;
+    font-family: inherit;
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid var(--border);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.auth-tab.is-active {
+    color: var(--brand-primary);
+    border-bottom-color: var(--brand-primary);
 }
 
 /* ─── Inputs: stacked, evenly spaced, thumb-friendly ─────────────────── */
@@ -92,6 +150,23 @@
 
 .inputs-wrapper button:hover {
     background: var(--brand-darkest);
+}
+
+/* ─── "— or —" divider above the Google button ───────────────────────── */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-muted);
+    font-size: var(--font-size-small);
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    flex: 1;                    /* the two hairlines fill the sides */
+    height: 1px;
+    background: var(--border);
 }
 
 /* ─── Errors ─────────────────────────────────────────────────────────── */

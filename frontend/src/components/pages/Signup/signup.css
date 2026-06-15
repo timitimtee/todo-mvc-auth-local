@@ -1,9 +1,112 @@
 /* Google button styles now live in GoogleSignInButton.css (shared component). */
 
-.signup-form-wrapper,
-.inputs-wrapper {
+/* ─── Page centerer: puts the card dead-center, both axes ─────────────── */
+.signup-form-wrapper {
+    display: flex;
+    align-items: center;        /* vertical center */
+    justify-content: center;    /* horizontal center */
+
+    min-height: 100dvh;         /* dvh = dynamic viewport height: avoids the
+                                   mobile URL-bar jump that 100vh suffers */
+    padding: 1rem;              /* card never kisses the screen edge on phones */
+}
+
+/* ─── The card itself ────────────────────────────────────────────────── */
+.signup-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;       /* children fill width so controls line up */
+    gap: 1rem;
+
+    width: 100%;                /* mobile-first: fill available width... */
+    max-width: 360px;           /* ...but never get wider than this on desktop */
+    padding: 1.5rem;
+
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+}
+
+/* the bare <div> wrapping <GoogleSignInButton /> — let the pill fill the card */
+.signup-card > div {
+    width: 100%;
+}
+
+/* logo sits at the top, centered (card stretches children, so center the img) */
+.signup-card .logo {
     display: flex;
     justify-content: center;
-    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.signup-card .logo img {
+    height: 56px;   /* a touch bigger than the 40px nav default — it's the hero here */
+}
+
+/* ─── Inputs: stacked, evenly spaced, thumb-friendly ─────────────────── */
+.inputs-wrapper {
+    display: flex;
     flex-direction: column;
+    gap: 0.75rem;
+}
+
+.inputs-wrapper input {
+    width: 100%;
+    min-height: 48px;           /* >=44px tap target = ergonomic on touch */
+    padding: 0.75rem 1rem;
+    font-family: inherit;
+    font-size: 16px;            /* 16px stops iOS Safari auto-zoom on focus */
+    color: var(--text-body);
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.inputs-wrapper input::placeholder {
+    color: var(--text-muted);
+    font-weight: var(--font-weight-regular);
+}
+
+.inputs-wrapper input:focus {
+    border-color: var(--brand-mid);
+}
+
+/* ─── Submit button: brand green, pill like the Google button ─────────── */
+.inputs-wrapper button {
+    margin-top: 0.5rem;
+    width: 100%;
+    min-height: 48px;           /* same thumb-friendly target */
+    padding: 0.75rem 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-inverse);
+    background: var(--brand-primary);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.inputs-wrapper button:hover {
+    background: var(--brand-darkest);
+}
+
+/* ─── Errors ─────────────────────────────────────────────────────────── */
+.alert-danger {
+    padding: 0.6rem 0.85rem;
+    font-size: var(--font-size-small);
+    color: var(--text-inverse);
+    background: var(--error);
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* ─── Bigger screens: a touch more padding inside the card ───────────── */
+@media (min-width: 480px) {
+    .signup-card {
+        padding: 2rem;
+    }
 }

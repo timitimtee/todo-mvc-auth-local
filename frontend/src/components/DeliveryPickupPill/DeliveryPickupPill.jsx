@@ -27,7 +27,7 @@ const DATE_OPTIONS = (() => {
           weekday: "short",
           month: "short",
           day: "numeric",
-        })
+        }),
       );
   }
   return out;
@@ -52,7 +52,7 @@ function buildTimingText(orderType, timing) {
   if (timing.mode === ASAP) {
     return orderType === "delivery"
       ? `ASAP • Estimated in ~${ASAP_MINUTES} min`
-      : `Pickup in ~${ASAP_MINUTES} min`;
+      : `ASAP • Pickup in ~${ASAP_MINUTES} min`;
   }
   // scheduled — "today"/"tomorrow" read better lowercased; real dates keep case
   const when =
@@ -69,7 +69,8 @@ const DELIVERY_ADDR_KEY = "deliveryAddress";
 
 // Pickup is a single fixed store location — hardcoded text + its Google Maps
 // link (opened in a new tab when the row is clicked in pickup mode).
-const PICKUP_LOCATION_TEXT = "Pickup at Strada Francesco Griselini 2, Timișoara";
+const PICKUP_LOCATION_TEXT =
+  "Pickup at Strada Francesco Griselini 2, Timișoara";
 const PICKUP_MAPS_URL =
   "https://www.google.com/maps/place//data=!4m2!3m1!1s0x4745678025a4a945:0x8a7ea0a1c5b61adb?sa=X&ved=1t:8290&ictx=111";
 

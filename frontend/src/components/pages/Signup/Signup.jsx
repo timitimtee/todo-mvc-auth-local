@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../hooks/useUser";
 import GoogleSignInButton from "../../GoogleSignInButton/GoogleSignInButton";
+import Logo from "../../Logo/Logo";
 import "./signup.css";
 
 export default function Signup() {
@@ -39,15 +40,14 @@ export default function Signup() {
 
   return (
     <div className="signup-form-wrapper">
-      <div>
-        <GoogleSignInButton />
-      </div>
-      {errors.map((err, i) => (
-        <div key={i} className="alert alert-danger">
-          {err.msg}
-        </div>
-      ))}
-      <form className="inputs-wrapper" onSubmit={handleSubmit}>
+      <div className="signup-card">
+        <Logo />
+        {errors.map((err, i) => (
+          <div key={i} className="alert alert-danger">
+            {err.msg}
+          </div>
+        ))}
+        <form className="inputs-wrapper" onSubmit={handleSubmit}>
         <input
           type="text"
           name="userName"
@@ -76,8 +76,12 @@ export default function Signup() {
           onChange={handleChange}
           placeholder="Confirm Password"
         />
-        <button type="submit">Create Account</button>
-      </form>
+          <button type="submit">Create Account</button>
+        </form>
+        <div>
+          <GoogleSignInButton />
+        </div>
+      </div>
     </div>
   );
 }

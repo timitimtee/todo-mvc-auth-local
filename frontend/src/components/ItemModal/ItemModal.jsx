@@ -79,7 +79,9 @@ export default function ItemModal() {
       price: item.menu_item_price,
       extras: chosenExtras,
     });
-    navigate("/"); // back to the menu; the "added" modal shows there
+    // replace:true so the modal entry is dropped from history — Back from the
+    // menu won't reopen the item we just added.
+    navigate("/", { replace: true });
   }
 
   return (

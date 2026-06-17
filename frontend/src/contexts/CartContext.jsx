@@ -5,11 +5,16 @@ export const CartContext = createContext();
 
 const STORAGE_KEY = "cart";
 
+// Bump this whenever the persisted line shape changes. On load we discard a
+// saved cart whose version doesn't match, instead of feeding a stale shape
+// (e.g. a line with no `extras`) into the renderer and crashing it.
+const CART_VERSION = 1;
+
 // Build a stable identity for a line from its menu item + chosen extras, so
 // adding the exact same item+extras again MERGES into one line (qty++) instead
 // of creating a duplicate. Extras are sorted so selection order doesn't matter.
 // Different extras -> different signature -> separate line.
-function lineSignature(menuItemId, extras) {
+function lineSignature(menuItemId, extras = []) {
   const extrasKey = [...extras]
     .map((e) => `${e.name}:${e.qty}`)
     .sort()
@@ -19,7 +24,10 @@ function lineSignature(menuItemId, extras) {
 
 // Price of ONE unit of a line = item price + each extra's price * its own qty.
 function unitPrice(line) {
-  const extrasTotal = line.extras.reduce((sum, e) => sum + e.price * e.qty, 0);
+  const extrasTotal = (line.extras || []).reduce(
+    (sum, e) => sum + e.price * e.qty,
+    0,
+  );
   return line.price + extrasTotal;
 }
 
@@ -31,8 +39,9 @@ export function CartProvider({ children }) {
   // Lazy initialiser: read localStorage once so a page refresh keeps the cart.
   const [items, setItems] = useState(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      // Only trust a saved cart that matches the current shape version.
+      return saved && saved.v === CART_VERSION ? saved.items : [];
     } catch {
       return [];
     }
@@ -46,9 +55,12 @@ export function CartProvider({ children }) {
   // 0 = hidden; >0 = how many were just added.
   const [lastAddCount, setLastAddCount] = useState(0);
 
-  // Mirror the cart to localStorage on every change.
+  // Mirror the cart to localStorage on every change (tagged with the version).
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ v: CART_VERSION, items }),
+    );
   }, [items]);
 
   // line = { menuItemId, name, image, price, extras:[{name,price,qty}] }
@@ -89,6 +101,10 @@ export function CartProvider({ children }) {
   }
 
   // Derived totals — recomputed every render, never stored, so they can't drift.
+  // TODO(checkout): these prices + tax are CLIENT-SIDE and live in localStorage,
+  // so a user can tamper with them. The checkout endpoint MUST re-fetch each
+  // item's price by menuItemId, recompute extras + tax server-side (in integer
+  // cents to avoid float drift), and ignore any amounts sent from the client.
   const count = items.reduce((sum, l) => sum + l.qty, 0);
   const subtotal = items.reduce((sum, l) => sum + unitPrice(l) * l.qty, 0);
   const tax = subtotal * TAX_RATE;

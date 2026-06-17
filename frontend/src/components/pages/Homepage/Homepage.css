@@ -17,3 +17,9 @@
     padding-left: 6px;
     padding-right: 6px;
 }
+
+/* Reserve room at the bottom so the fixed "View order" pill never covers the
+   last menu row. Only rendered when the cart has items (see Homepage.jsx). */
+.view-order-spacer {
+    height: 88px;
+}

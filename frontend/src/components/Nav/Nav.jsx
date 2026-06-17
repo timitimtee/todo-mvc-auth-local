@@ -6,7 +6,7 @@ import Logo from "../Logo/Logo";
 import logoTitle from "./biofreshLogo-title-fb.jpg";
 import ShoppingCart from "../ShoppingCart/ShoppingCart";
 
-export default function Nav({ cartCount }) {
+export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -31,7 +31,7 @@ export default function Nav({ cartCount }) {
         <NavLink to="/about" label="About Us" />
         <NavLink to="/contact" label="Contact" />
       </div>
-      <ShoppingCart count={cartCount} />
+      <ShoppingCart />
     </nav>
   );
 }

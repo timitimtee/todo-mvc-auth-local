@@ -23,6 +23,11 @@
     padding: 16px 0;
     border-bottom: 1px solid #e5e5e5;
     gap: 16px;
+    cursor: pointer;
+}
+
+.menu-item:hover .menu-item-name {
+    color: #c0392b;
 }
 
 .menu-item-info {

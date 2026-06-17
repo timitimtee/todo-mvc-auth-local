@@ -31,6 +31,7 @@ In production, `server.js` serves the Vite build from `dist/`.
 - `routes/todos.js` → todo CRUD endpoints (`/todos/*`)
 - `routes/auth.js` → Google OAuth endpoints, mounted at `/auth` (`/auth/google`, `/auth/google/callback`)
 - `routes/locations.js` → saved-address CRUD (`GET /`, `POST /addLocation`, `PUT /updateLocation`, `DELETE /deleteLocation`), all `ensureAuth`, mounted at `/api/locations`
+- `routes/menuItems.js` → public menu reads, mounted at `/api/menuitems`: `GET /` (all items) and `GET /:id` (one item). `getMenuItem` is used by the item modal so a deep-linked/refreshed `/item/:slug_id` URL can load on its own; a bad/non-existent id (incl. CastError) returns `404`. No auth — the menu is browseable by guests.
 
 ### Middleware — `backend/middleware/auth.js`
 - Single responsibility per function
@@ -52,6 +53,8 @@ In production, `server.js` serves the Vite build from `dist/`.
 ### Routing — `frontend/src/App.jsx`
 - All client-side routes defined here with React Router `<Routes>` / `<Route>`
 - These are UI routes only — separate from Express API routes
+- **Modal-as-a-route** (`backgroundLocation` pattern): the item modal has its own URL `/item/:itemParam` so it's deep-linkable and the Back button closes it. `AppRoutes()` reads `location.state?.backgroundLocation`; when present (set by a menu card click) the main `<Routes>` renders using that stashed location (menu stays mounted) and a second `<Routes>` renders `ItemModal` on top. On a direct visit/refresh of `/item/...` there is no background, so the main `<Routes>` matches `/item/...` itself and the fullscreen modal shows alone. `:itemParam` = `slug_id`; only the trailing `_id` is used to fetch (slug is cosmetic). Docs term: "react router modal backgroundLocation".
+- App is wrapped `UserProvider` → `CartProvider` → routes.
 
 ### Components — `frontend/src/components/`
 - One file per page/feature
@@ -64,6 +67,14 @@ In production, `server.js` serves the Vite build from `dist/`.
   - `OrderTimingModal/` — controlled center modal (overlay) for choosing ASAP vs Schedule-for-later (+ Date/Time `<select>`s). Parent passes `value` and gets the new selection via `onConfirm`; Cancel/overlay click discards the draft. `ASAP_MINUTES` and the date/time option lists are hardcoded with `TODO(backend)` — meant to come from the admin dashboard later.
   - `DeliveryAddressModal/` — controlled center modal (same shell as OrderTimingModal) opened by clicking the location row when Delivery is selected. Reuses `SearchLocations` for the address search. Two views: **browse** (search + saved-address list when logged in, or sign-in prompt when logged out) and **confirm** (address + "Additional details" → the single `comment` field). Persists via `/api/locations` when logged in, else `localStorage` key `deliveryAddress`. Hands the chosen `{ address, comment }` up via `onConfirm`; the pill shows it as "Delivery to …". On load the pill seeds the active address from the first `/api/locations` entry (logged in) or localStorage (logged out).
 
+#### Cart & item-ordering UI (all read `useCart`)
+- `MenuItems/MenuItems.jsx` — menu list at `/`. The **whole `<li>` is clickable** → `navigate('/item/<slug>_<id>', { state:{ backgroundLocation: location } })` (opens the modal over the menu). `slugify()` makes the cosmetic slug from the name. No inline add button anymore.
+- `ItemModal/` — fullscreen item modal (route `/item/:itemParam`). Parses the id from after the last `_`, fetches `GET /api/menuitems/:id`. Shows image → name → price → description → "Customize your item" → **Extras** (from `EXTRAS`). Each extra row toggles between a `+` (add) and `[trash] qty [+]`. Sticky footer "Add to Cart $total" (`item price + Σ extra.price*qty`). On add → `addItem()` then `navigate('/')`; X/Back closes via `backgroundLocation` (else `/`).
+- `AddedModal/` — bottom-sheet "N item(s) added" shown on `/` when `lastAddCount > 0`. "View cart" → `clearLastAdded()` + `openDrawer()`; "Back to menu" → `clearLastAdded()`.
+- `ViewOrderButton/` — fixed bottom pill, **only renders when `count > 0`**, label "View order — $total [count]", opens the drawer. Rendered by `Homepage`.
+- `ShoppingCart/ShoppingCart.jsx` — Nav cart icon; reads `count` + `openDrawer` from `useCart` (no props), renders `<CartDrawer />`.
+  - `CartDrawer/CartDrawer.jsx` — slide-in panel driven by `drawerOpen`/`closeDrawer`. Empty → "Add items to start your order"; else lists lines (image, name, extras text, line price, `[trash] qty [+]`) + Subtotal / Tax / **Checkout** (stub `onClick` — real flow is a later task).
+
 ### State / Auth context — `frontend/src/contexts/UserContext.jsx`
 - `UserProvider` is the single source of truth for "who is logged in". Wraps the app in `App.jsx`.
 - Holds three states: `loading` (true until first `/api/me` resolves), `user` object (logged in), or `null` (logged out)
@@ -72,8 +83,16 @@ In production, `server.js` serves the Vite build from `dist/`.
 - `refreshUser()` = manual re-check, called after any login that happens **after** mount (e.g. the signup form) since the on-mount `useEffect` does not re-run on client-side navigation
 - No `register()` — the signup path POSTs to `/api/signup` itself, then calls `refreshUser()` before navigating
 
+### Cart state — `frontend/src/contexts/CartContext.jsx`
+- **Single source of truth for the cart**, mirrors the `UserContext` shape. Lives **entirely client-side** (React state + `localStorage` key `cart`) so it works for guests AND logged-in users — login only affects saved addresses, NOT the cart. Order history is saved later, at checkout (not built yet).
+- Line shape: `{ lineId, menuItemId, name, image, price, qty, extras:[{name,price,qty}] }`. `lineId` = a signature of `menuItemId` + sorted extras, so adding the exact same item+extras **merges** (qty++); different extras = separate line.
+- Exposes: `items`, derived `count`/`subtotal`/`tax`/`total`, `unitPrice(line)`, `addItem(line, qty=1)`, `incrementLine(id)`, `removeLine(id)` (no minus — trash removes the whole line, matching the reference UI), drawer state `drawerOpen`/`openDrawer()`/`closeDrawer()`, and `lastAddCount`/`clearLastAdded()` (drives the "added" modal).
+- `cart/constants.js` — `EXTRAS` (hardcoded placeholder list shown for every item; `TODO(backend)` → per-item admin-managed later) and `TAX_RATE` (hardcoded; `TODO(backend)` like `ASAP_MINUTES`).
+- Read it via the `useCart` hook, never `useContext` directly.
+
 ### Hooks — `frontend/src/hooks/`
 - `useUser.jsx` — thin `useContext(UserContext)` wrapper; throws if used outside `UserProvider`. Components read auth state via this, never `useContext` directly.
+- `useCart.jsx` — same pattern for `CartContext`; throws outside `CartProvider`.
 
 ### Auth networking
 - Frontend uses **relative** fetch paths (`fetch("/api/me")`), never absolute (`http://localhost:2121/...`). The Vite dev proxy (`vite.config.js` → `server.proxy`) forwards `/api` and `/auth` to the backend, so the browser stays same-origin and the session cookie attaches automatically — no CORS needed.

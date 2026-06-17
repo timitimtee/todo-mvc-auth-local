@@ -1,30 +1,26 @@
-import { useState } from "react";
 import Nav from "../../Nav/Nav";
-import OrderNow from "../../OrderNow/OrderNow";
 import MenuItems from "../../MenuItems/MenuItems";
-import "./Homepage.css";
-import "../../DeliveryPickupPill/DeliveryPickupPill";
 import DeliveryPickupPill from "../../DeliveryPickupPill/DeliveryPickupPill";
+import ViewOrderButton from "../../ViewOrderButton/ViewOrderButton";
+import AddedModal from "../../AddedModal/AddedModal";
+import "./Homepage.css";
 import heroImage from "./biofresh-hero-3.jpg";
 
 export default function Homepage() {
-  const [cartCount, setCartCount] = useState(0);
-
-  function handleAddItem() {
-    setCartCount((c) => c + 1);
-  }
-
   return (
     <>
-      <Nav cartCount={cartCount} />
+      <Nav />
       <div className="hero-image-container">
         <img src={heroImage}></img>
       </div>
       <div className="menu-wrapper">
         <DeliveryPickupPill />
-        <MenuItems onAddItem={handleAddItem} />
+        <MenuItems />
       </div>
-      {/* <OrderNow />*/}
+      {/* Floating "View order" pill + the post-add confirmation modal. Both read
+          the cart from CartContext, so they only appear when relevant. */}
+      <ViewOrderButton />
+      <AddedModal />
     </>
   );
 }

@@ -1,7 +1,20 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./MenuItems.css";
 
-export default function MenuItems({ onAddItem }) {
+// Turn "Birria Quesadilla" -> "birria-quesadilla" for a human/SEO-friendly URL.
+// The slug is cosmetic only; the trailing _id is what actually looks the item up.
+function slugify(str) {
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export default function MenuItems() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [menuItems, setMenuItems] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const carouselRef = useRef(null);
@@ -52,6 +65,16 @@ export default function MenuItems({ onAddItem }) {
     if (el) el.scrollIntoView({ behavior: "smooth" });
   }
 
+  // Open the item in the modal. We pass the CURRENT location as
+  // backgroundLocation so the menu stays rendered behind the modal and the
+  // browser Back button (or the modal's X) returns here. See App.jsx.
+  function openItem(item) {
+    const slug = slugify(item.menu_item_name);
+    navigate(`/item/${slug}_${item._id}`, {
+      state: { backgroundLocation: location },
+    });
+  }
+
   return (
     <>
       <section className="menu-browse">
@@ -88,7 +111,11 @@ export default function MenuItems({ onAddItem }) {
             <h2 className="menu-section-title">{cat}</h2>
             <ul className="menu-list">
               {grouped[cat].map((item) => (
-                <li key={item._id} className="menu-item">
+                <li
+                  key={item._id}
+                  className="menu-item"
+                  onClick={() => openItem(item)}
+                >
                   <div className="menu-item-info">
                     <h3 className="menu-item-name">{item.menu_item_name}</h3>
                     {item.menu_item_description && (
@@ -99,7 +126,6 @@ export default function MenuItems({ onAddItem }) {
                     <p className="menu-item-price">
                       ${item.menu_item_price.toFixed(2)}
                     </p>
-                    <button onClick={onAddItem}>Add to cart</button>
                   </div>
                   <div className="menu-item-image-wrapper">
                     <img

@@ -1,0 +1,62 @@
+/* Bottom-sheet confirmation. z-index 1000 = same modal layer as the item modal. */
+.added-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.added-modal {
+    width: 100%;
+    max-width: 480px;
+    background: #fff;
+    border-radius: 16px 16px 0 0;
+    padding: 24px 16px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.added-modal-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+    margin: 0;
+    text-align: center;
+}
+
+.added-modal-check {
+    color: #2e7d32;
+    font-size: 18px;
+}
+
+.added-modal-viewcart {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 28px;
+    background: #fff;
+    color: #111;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.added-modal-back {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 28px;
+    background: #c0392b;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}

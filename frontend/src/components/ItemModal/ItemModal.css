@@ -1,0 +1,211 @@
+/* Fullscreen item modal. z-index 1000 keeps it above the sticky category bar
+   (10) and the Nav (101), matching the codebase rule "modals/overlays >=999". */
+.item-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+}
+
+.item-modal {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.item-modal-close {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: #111;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.item-modal-status {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: #666;
+}
+
+.item-modal-status-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 24px;
+    background: #c0392b;
+    color: #fff;
+    cursor: pointer;
+}
+
+.item-modal-image-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #f5f5f5;
+    flex-shrink: 0;
+}
+
+.item-modal-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Pad the body, and leave room at the bottom so the sticky footer button never
+   covers the last extra. */
+.item-modal-body {
+    padding: 20px 16px 100px;
+}
+
+.item-modal-name {
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #111;
+    margin: 0 0 8px;
+}
+
+.item-modal-price {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
+    margin: 0 0 12px;
+}
+
+.item-modal-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+    margin: 0 0 24px;
+}
+
+.item-modal-section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 12px;
+}
+
+.extras-group {
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.extras-group-header {
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+    background: #fafafa;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.extra-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.extra-row:last-child {
+    border-bottom: none;
+}
+
+.extra-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.extra-name {
+    font-size: 14px;
+    color: #111;
+}
+
+.extra-price {
+    font-size: 13px;
+    color: #666;
+}
+
+.extra-add-btn,
+.extra-trash-btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+}
+
+.extra-add-btn {
+    color: #c0392b;
+    border-color: #c0392b;
+}
+
+.extra-stepper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.extra-qty {
+    font-size: 15px;
+    min-width: 14px;
+    text-align: center;
+}
+
+.item-modal-footer {
+    position: sticky;
+    bottom: 0;
+    margin-top: auto;
+    padding: 12px 16px;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+.add-to-cart-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 28px;
+    background: #c0392b;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.add-to-cart-btn:hover {
+    background: #a93226;
+}

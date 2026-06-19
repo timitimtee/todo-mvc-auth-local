@@ -133,6 +133,12 @@
 
 .category-section {
     margin-bottom: 8px;
+    /* When jumpToCategory() calls scrollIntoView(), the browser stops with this
+       section's top at y=0 — but the sticky .menu-browse picker also sits at
+       y=0, so it would cover the title. scroll-margin-top reserves a gap at the
+       top during scroll, equal to the picker height + a little breathing room,
+       so the title lands just below the bar. */
+    scroll-margin-top: 72px;
 }
 
 .menu-item-add-btn {

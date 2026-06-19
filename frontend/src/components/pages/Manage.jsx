@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UploadWidget from '../UploadWidget/UploadWidget'
+import './Manage.css'
 
 const STATUS_OPTIONS = ['pending', 'confirmed', 'preparing', 'ready', 'delivered']
 
@@ -12,45 +13,33 @@ const EMPTY_ITEM = {
   menu_item_image: '',
 }
 
-// Small ~110px rounded square showing the current image, or a neutral
-// placeholder when none is set yet. Mirrors the look of .menu-item-image-wrapper
-// (object-fit: cover) used on the public menu so admins see the real crop.
+// Friendly labels shown in the UI, decoupled from the backend field keys. The
+// request body still sends menu_item_* keys (the model is unchanged) — only the
+// <label> text the admin sees changes.
+const FIELD_LABELS = {
+  menu_item_name: 'Name',
+  menu_item_description: 'Description',
+  menu_item_category: 'Category',
+  menu_item_price: 'Price',
+  menu_item_image: 'Image',
+}
+
+// Text fields rendered by the shared field loop (image is handled separately
+// via UploadWidget below).
+const TEXT_FIELDS = ['menu_item_name', 'menu_item_description', 'menu_item_category', 'menu_item_price']
+
+// ~110px rounded square showing the current image, or a neutral placeholder when
+// none is set. Mirrors the public menu crop (object-fit: cover) so admins see
+// the real result.
 function imagePreview(url) {
-  const box = {
-    width: 110,
-    height: 110,
-    flexShrink: 0,
-    borderRadius: 10,
-    background: '#f5f5f5',
-    overflow: 'hidden',
-  }
   if (url) {
     return (
-      <div style={box}>
-        <img
-          src={url}
-          alt="menu item preview"
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        />
+      <div className="manage-img-preview">
+        <img src={url} alt="menu item preview" />
       </div>
     )
   }
-  return (
-    <div
-      style={{
-        ...box,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#999',
-        fontSize: 12,
-        textAlign: 'center',
-        border: '1px dashed #ccc',
-      }}
-    >
-      No image yet
-    </div>
-  )
+  return <div className="manage-img-preview manage-img-preview--empty">No image yet</div>
 }
 
 export default function Manage() {
@@ -60,6 +49,7 @@ export default function Manage() {
   const [editingItem, setEditingItem] = useState(null)
   const [newItem, setNewItem] = useState(EMPTY_ITEM)
   const [showAddForm, setShowAddForm] = useState(false)
+  const [activeCategory, setActiveCategory] = useState(null) // null = "All"
   const [error, setError] = useState(null)
   const [formError, setFormError] = useState(null)
   const navigate = useNavigate()
@@ -148,22 +138,76 @@ export default function Manage() {
     }
   }
 
-  if (error) return <p style={{ padding: '2rem', color: 'red' }}>{error}</p>
+  // Toggle the add form. When opening with a category chip active, prefill that
+  // category so adding "within this category" is one less field to type.
+  function toggleAddForm() {
+    setFormError(null)
+    if (showAddForm) {
+      setShowAddForm(false)
+      return
+    }
+    setNewItem({ ...EMPTY_ITEM, menu_item_category: activeCategory || '' })
+    setShowAddForm(true)
+  }
+
+  // Renders the shared text fields + the image upload block for either the add
+  // form (item=newItem) or the edit form (item=editingItem). setItem MUST use
+  // the functional form so the once-built UploadWidget callback can't wipe other
+  // fields with a frozen snapshot (see REFERENCES.md UploadWidget gotcha).
+  function itemFields(item, setItem) {
+    return (
+      <>
+        {TEXT_FIELDS.map(field => (
+          <div key={field} className="manage-field">
+            <label className="manage-label">{FIELD_LABELS[field]}</label>
+            <input
+              className="manage-input"
+              type={field === 'menu_item_price' ? 'number' : 'text'}
+              min={field === 'menu_item_price' ? '0' : undefined}
+              step={field === 'menu_item_price' ? '0.01' : undefined}
+              list={field === 'menu_item_category' ? 'category-options' : undefined}
+              value={item[field]}
+              onChange={e => setItem(prev => ({ ...prev, [field]: e.target.value }))}
+            />
+          </div>
+        ))}
+        <div className="manage-field">
+          <label className="manage-label">{FIELD_LABELS.menu_item_image}</label>
+          <div className="manage-image-row">
+            {imagePreview(item.menu_item_image)}
+            <UploadWidget
+              onUploadSuccess={info => setItem(prev => ({ ...prev, menu_item_image: info.secure_url }))}
+              onUploadError={() => setFormError('Image upload failed. Check your Cloudinary preset is unsigned.')}
+            />
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  if (error) return <p className="manage-error">{error}</p>
+
+  // Distinct categories for the filter chips + the datalist suggestions, derived
+  // client-side from the loaded items (same approach as MenuItems.jsx).
+  const categories = [...new Set(menuItems.map(i => i.menu_item_category).filter(Boolean))]
+  const visibleItems = activeCategory
+    ? menuItems.filter(i => i.menu_item_category === activeCategory)
+    : menuItems
 
   return (
-    <div style={{ maxWidth: 800, margin: '2rem auto', padding: '0 1rem', fontFamily: 'sans-serif' }}>
-      <h1>Admin Dashboard</h1>
+    <div className="manage">
+      <h1 className="manage-title">Management Dashboard</h1>
 
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+      <div className="manage-tabs">
         <button
+          className={`manage-tab${tab === 'menu' ? ' manage-tab--active' : ''}`}
           onClick={() => setTab('menu')}
-          style={{ fontWeight: tab === 'menu' ? 'bold' : 'normal', padding: '0.5rem 1rem' }}
         >
           Menu Items
         </button>
         <button
+          className={`manage-tab${tab === 'orders' ? ' manage-tab--active' : ''}`}
           onClick={() => setTab('orders')}
-          style={{ fontWeight: tab === 'orders' ? 'bold' : 'normal', padding: '0.5rem 1rem' }}
         >
           Orders
         </button>
@@ -171,107 +215,125 @@ export default function Manage() {
 
       {tab === 'menu' && (
         <div>
-          <button onClick={() => setShowAddForm(!showAddForm)} style={{ marginBottom: '1rem', padding: '0.4rem 1rem' }}>
+          {/* Shared across both add + edit category inputs */}
+          <datalist id="category-options">
+            {categories.map(cat => (
+              <option key={cat} value={cat} />
+            ))}
+          </datalist>
+
+          {categories.length > 0 && (
+            <div className="manage-filter">
+              <label className="manage-filter-label" htmlFor="category-filter">
+                Filter by category
+              </label>
+              <div className="manage-filter-select-wrap">
+                <select
+                  id="category-filter"
+                  className="manage-filter-select"
+                  value={activeCategory ?? ''}
+                  onChange={e => setActiveCategory(e.target.value || null)}
+                >
+                  <option value="">All categories</option>
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+              <span className="manage-filter-count">
+                {visibleItems.length} {visibleItems.length === 1 ? 'item' : 'items'}
+              </span>
+            </div>
+          )}
+
+          <button
+            className="manage-btn manage-add-toggle"
+            onClick={toggleAddForm}
+          >
             {showAddForm ? 'Cancel' : '+ Add Item'}
           </button>
 
           {showAddForm && (
-            <div style={{ border: '1px solid #ccc', padding: '1rem', marginBottom: '1rem', borderRadius: 4 }}>
-              <h3 style={{ marginTop: 0 }}>New Menu Item</h3>
-              {['menu_item_name', 'menu_item_description', 'menu_item_category', 'menu_item_price'].map(field => (
-                <div key={field} style={{ marginBottom: '0.5rem' }}>
-                  <label style={{ display: 'block', fontSize: 12, marginBottom: 2 }}>{field}</label>
-                  <input
-                    type={field === 'menu_item_price' ? 'number' : 'text'}
-                    min={field === 'menu_item_price' ? '0' : undefined}
-                    step={field === 'menu_item_price' ? '0.01' : undefined}
-                    value={newItem[field]}
-                    onChange={e => setNewItem({ ...newItem, [field]: e.target.value })}
-                    style={{ width: '100%', padding: '0.3rem', boxSizing: 'border-box' }}
-                  />
-                </div>
-              ))}
-              <div style={{ marginBottom: '0.5rem' }}>
-                <label style={{ display: 'block', fontSize: 12, marginBottom: 2 }}>menu_item_image</label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  {imagePreview(newItem.menu_item_image)}
-                  <UploadWidget
-                    onUploadSuccess={info => setNewItem(prev => ({ ...prev, menu_item_image: info.secure_url }))}
-                    onUploadError={() => setFormError('Image upload failed. Check your Cloudinary preset is unsigned.')}
-                  />
-                </div>
+            <div className="manage-card">
+              <h3 className="manage-card-title">New Menu Item</h3>
+              {itemFields(newItem, setNewItem)}
+              {formError && <p className="manage-form-error">{formError}</p>}
+              <div className="manage-form-actions">
+                <button className="manage-btn" onClick={addItem}>Save</button>
               </div>
-              {formError && <p style={{ color: 'red', fontSize: 13, margin: '0 0 0.5rem' }}>{formError}</p>}
-              <button onClick={addItem} style={{ marginTop: '0.5rem', padding: '0.4rem 1rem' }}>Save</button>
             </div>
           )}
 
-          {menuItems.map(item => (
-            <div key={item._id} style={{ border: '1px solid #ccc', padding: '1rem', marginBottom: '0.75rem', borderRadius: 4 }}>
-              {editingItem?._id === item._id ? (
-                <div>
-                  {['menu_item_name', 'menu_item_description', 'menu_item_category', 'menu_item_price'].map(field => (
-                    <div key={field} style={{ marginBottom: '0.5rem' }}>
-                      <label style={{ display: 'block', fontSize: 12, marginBottom: 2 }}>{field}</label>
-                      <input
-                        type={field === 'menu_item_price' ? 'number' : 'text'}
-                        min={field === 'menu_item_price' ? '0' : undefined}
-                        step={field === 'menu_item_price' ? '0.01' : undefined}
-                        value={editingItem[field]}
-                        onChange={e => setEditingItem({ ...editingItem, [field]: e.target.value })}
-                        style={{ width: '100%', padding: '0.3rem', boxSizing: 'border-box' }}
-                      />
-                    </div>
-                  ))}
-                  <div style={{ marginBottom: '0.5rem' }}>
-                    <label style={{ display: 'block', fontSize: 12, marginBottom: 2 }}>menu_item_image</label>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      {imagePreview(editingItem.menu_item_image)}
-                      <UploadWidget
-                        onUploadSuccess={info => setEditingItem(prev => ({ ...prev, menu_item_image: info.secure_url }))}
-                        onUploadError={() => setFormError('Image upload failed. Check your Cloudinary preset is unsigned.')}
-                      />
+          <ul className="manage-list">
+            {visibleItems.map(item => (
+              <li key={item._id}>
+                {editingItem?._id === item._id ? (
+                  <div className="manage-card">
+                    {itemFields(editingItem, setEditingItem)}
+                    {formError && <p className="manage-form-error">{formError}</p>}
+                    <div className="manage-form-actions">
+                      <button className="manage-btn" onClick={() => saveEdit(item._id)}>Save</button>
+                      <button
+                        className="manage-btn manage-btn--secondary"
+                        onClick={() => { setEditingItem(null); setFormError(null) }}
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </div>
-                  {formError && <p style={{ color: 'red', fontSize: 13, margin: '0 0 0.5rem' }}>{formError}</p>}
-                  <button onClick={() => saveEdit(item._id)} style={{ marginRight: '0.5rem', padding: '0.3rem 0.8rem' }}>Save</button>
-                  <button onClick={() => { setEditingItem(null); setFormError(null) }} style={{ padding: '0.3rem 0.8rem' }}>Cancel</button>
-                </div>
-              ) : (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <strong>{item.menu_item_name}</strong> — {item.menu_item_category} — ${item.menu_item_price}
-                    <p style={{ margin: '0.25rem 0 0', fontSize: 13, color: '#555' }}>{item.menu_item_description}</p>
+                ) : (
+                  <div className="manage-row">
+                    <div className="manage-row-info">
+                      <h3 className="manage-row-name">{item.menu_item_name}</h3>
+                      <p className="manage-row-meta">
+                        {item.menu_item_category} · ${item.menu_item_price}
+                      </p>
+                      {item.menu_item_description && (
+                        <p className="manage-row-desc">{item.menu_item_description}</p>
+                      )}
+                      <div>
+                        <button
+                          className="manage-btn manage-btn--secondary"
+                          onClick={() => { setEditingItem({ ...item }); setFormError(null) }}
+                        >
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div className="manage-row-thumb">
+                      {item.menu_item_image && (
+                        <img src={item.menu_item_image} alt={item.menu_item_name} />
+                      )}
+                    </div>
                   </div>
-                  <button onClick={() => setEditingItem({ ...item })} style={{ padding: '0.3rem 0.8rem' }}>Edit</button>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
       {tab === 'orders' && (
         <div>
-          {orders.length === 0 && <p>No orders yet.</p>}
+          {orders.length === 0 && <p className="manage-empty">No orders yet.</p>}
           {orders.map(order => (
-            <div key={order._id} style={{ border: '1px solid #ccc', padding: '1rem', marginBottom: '0.75rem', borderRadius: 4 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div key={order._id} className="manage-card">
+              <div className="manage-order-head">
                 <div>
                   <strong>{order.user?.userName || order.user?.email}</strong>
-                  <span style={{ marginLeft: '1rem', fontSize: 12, color: '#777' }}>
+                  <span className="manage-order-when">
                     {new Date(order.createdAt).toLocaleString()}
                   </span>
-                  <ul style={{ margin: '0.5rem 0 0', paddingLeft: '1.2rem', fontSize: 13 }}>
+                  <ul className="manage-order-items">
                     {order.items.map((i, idx) => (
                       <li key={idx}>{i.name} x{i.quantity} — ${i.price}</li>
                     ))}
                   </ul>
                 </div>
                 <select
+                  className="manage-select"
                   value={order.status}
                   onChange={e => changeOrderStatus(order._id, e.target.value)}
-                  style={{ padding: '0.3rem' }}
                 >
                   {STATUS_OPTIONS.map(s => (
                     <option key={s} value={s}>{s}</option>

@@ -39,11 +39,13 @@ In production, `server.js` serves the Vite build from `dist/`.
 
 ### Server — `backend/server.js`
 - Follow existing `app.use()` pattern when wiring new routes or middleware
+- `app.set("trust proxy", 1)` is set near the top — required behind Render's reverse proxy so the `secure` session cookie sets over HTTPS and `req.ip` (used by the auth rate-limiter) reads the real client IP. Use `1`, never `true` (spoofable).
 
 ### Config — `backend/config/database.js`
 - Export single setup function, called once from `server.js`
 - Passport config in `backend/config/passport.js`
-- Env vars in `backend/config/.env`
+- Env vars in `backend/config/.env`; required-var checklist (no secrets) in repo-root `.env.example`
+- `BASE_URL` (prod: `https://<app>.onrender.com`, no trailing slash) drives the Google OAuth `callbackURL` in `passport.js`; falls back to `http://localhost:${PORT}` in dev
 
 ## Frontend
 

@@ -1,5 +1,11 @@
 const express = require("express");
 const app = express();
+// Behind Render's load balancer (a reverse proxy). Tell Express to trust the
+// first proxy hop so: (1) req.secure is true over HTTPS -> the secure session
+// cookie actually gets set, and (2) req.ip reads the real client IP from
+// X-Forwarded-For -> the auth rate-limiter buckets per user, not per proxy.
+// Value 1 (not `true`) trusts exactly one hop -> not spoofable.
+app.set("trust proxy", 1);
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");

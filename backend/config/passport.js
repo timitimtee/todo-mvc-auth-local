@@ -38,7 +38,9 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `http://localhost:${process.env.PORT}/auth/google/callback`,
+        // Prod (Render): BASE_URL = https://<app>.onrender.com (no trailing slash).
+        // Dev: falls back to localhost so nothing changes locally.
+        callbackURL: `${process.env.BASE_URL || `http://localhost:${process.env.PORT}`}/auth/google/callback`,
       },
       async (accessToken, refreshToken, profile, cb) => {
         try {

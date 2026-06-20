@@ -12,9 +12,9 @@ export default function Nav() {
   return (
     <nav className="nav">
       <div className="left-side-nav-container">
-        <div className="nav-hamburger">
+        {/* <div className="nav-hamburger">
           <Hamburger isActive={isOpen} onClick={() => setIsOpen((o) => !o)} />
-        </div>
+        </div>*/}
         <div className="logo-title-container">
           {/* <Logo />*/}
           {/* <h1 className="title">Biofresh</h1>*/}

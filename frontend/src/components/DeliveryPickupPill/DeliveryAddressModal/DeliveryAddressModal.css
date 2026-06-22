@@ -107,7 +107,8 @@
   box-sizing: border-box;
   padding: 13px 42px 13px 16px;
   font-family: "Poppins", sans-serif;
-  font-size: 14px;
+  /* 16px min: iOS Safari auto-zooms on focus when an input font is < 16px. */
+  font-size: 16px;
   color: #1a1a1a;
   background: #ffffff;
   border: 1px solid #d9d9d9;
@@ -241,7 +242,8 @@
   box-sizing: border-box;
   padding: 13px 14px;
   font-family: "Poppins", sans-serif;
-  font-size: 14px;
+  /* 16px min: iOS Safari auto-zooms on focus when an input font is < 16px. */
+  font-size: 16px;
   color: #1a1a1a;
   background: #ffffff;
   border: 1px solid #d9d9d9;

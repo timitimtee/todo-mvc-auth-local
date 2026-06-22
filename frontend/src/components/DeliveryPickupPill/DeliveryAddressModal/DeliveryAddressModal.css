@@ -296,6 +296,11 @@
 }
 
 @media (max-width: 420px) {
+  /* Top-anchor instead of center (see OrderTimingModal.css for the why). */
+  .da-overlay {
+    align-items: flex-start;
+  }
+
   .da-modal {
     width: 100vw;
     max-width: 100vw;
@@ -304,5 +309,8 @@
     max-height: 100vh;
     max-height: 100dvh;
     border-radius: 0;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }

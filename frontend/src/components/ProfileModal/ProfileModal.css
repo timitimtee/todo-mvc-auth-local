@@ -168,11 +168,19 @@
 
 /* On small screens go edge-to-edge: sidebar becomes a top row of pills. */
 @media (max-width: 600px) {
+  /* Top-anchor instead of center (see OrderTimingModal.css for the why). */
+  .profile-overlay {
+    align-items: flex-start;
+  }
+
   .profile-modal {
     width: 100vw;
     height: 100vh; /* fallback for browsers w/o dvh */
     height: 100dvh; /* dvh tracks the shrinking URL bar -> top not clipped */
     border-radius: 0;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .profile-body {

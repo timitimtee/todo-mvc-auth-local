@@ -158,6 +158,14 @@
 }
 
 @media (max-width: 420px) {
+  /* Top-anchor instead of center: centering an inset:0 overlay (layout
+     viewport) against a 100dvh modal (dynamic viewport) mismatches on iOS
+     and hides the header. Anchoring to the top is what makes CartDrawer
+     immune. */
+  .timing-overlay {
+    align-items: flex-start;
+  }
+
   .timing-modal {
     width: 100vw;
     max-width: 100vw;
@@ -166,5 +174,10 @@
     max-height: 100vh;
     max-height: 100dvh;
     border-radius: 0;
+    box-sizing: border-box;
+    /* keep header/footer clear of the notch + home bar (needs
+       viewport-fit=cover in index.html, else these resolve to 0) */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }

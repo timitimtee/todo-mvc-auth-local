@@ -5,7 +5,7 @@ import ViewOrderButton from "../../ViewOrderButton/ViewOrderButton";
 import AddedModal from "../../AddedModal/AddedModal";
 import { useCart } from "../../../hooks/useCart";
 import "./Homepage.css";
-import heroImage from "./biofresh-hero-3.jpg";
+import heroImage from "./Biofresh_hero_2.jpg";
 
 export default function Homepage() {
   const { count } = useCart();

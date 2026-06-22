@@ -48,36 +48,63 @@ const TIME_OPTIONS = (() => {
 })();
 
 // Build the time-container text from the current order type + timing choice.
+// Only the time estimate is bold (<strong>); the "ASAP •" prefix stays regular.
 function buildTimingText(orderType, timing) {
   if (timing.mode === ASAP) {
-    return orderType === "delivery"
-      ? `ASAP • Estimated in ~${ASAP_MINUTES} min`
-      : `ASAP • Pickup in ~${ASAP_MINUTES} min`;
+    const estimate =
+      orderType === "delivery"
+        ? `Estimated in ~${ASAP_MINUTES} min`
+        : `Pickup in ~${ASAP_MINUTES} min`;
+    return (
+      <>
+        ASAP • <strong>{estimate}</strong>
+      </>
+    );
   }
   // scheduled — "today"/"tomorrow" read better lowercased; real dates keep case
   const when =
     timing.date === "Today" || timing.date === "Tomorrow"
       ? timing.date.toLowerCase()
       : timing.date;
-  return orderType === "delivery"
-    ? `Estimated ${when} at ${timing.time}`
-    : `Pickup ${when} at ${timing.time}`;
+  // No "ASAP •" prefix here, so the whole estimate is the variable part -> bold.
+  const text =
+    orderType === "delivery"
+      ? `Estimated ${when} at ${timing.time}`
+      : `Pickup ${when} at ${timing.time}`;
+  return <strong>{text}</strong>;
 }
 
 // localStorage key for the active delivery address when logged out.
 const DELIVERY_ADDR_KEY = "deliveryAddress";
 
 // Pickup is a single fixed store location — hardcoded text + its Google Maps
-// link (opened in a new tab when the row is clicked in pickup mode).
-const PICKUP_LOCATION_TEXT =
-  "Pickup at Strada Francesco Griselini 2, Timișoara";
+// link (opened in a new tab when the row is clicked in pickup mode). Split into
+// prefix + address so only the street (the variable part) is bold.
+const PICKUP_LOCATION_PREFIX = "Pickup at ";
+const PICKUP_LOCATION_ADDRESS = "Strada Francesco Griselini 2, Timișoara";
 const PICKUP_MAPS_URL =
   "https://www.google.com/maps/place//data=!4m2!3m1!1s0x4745678025a4a945:0x8a7ea0a1c5b61adb?sa=X&ved=1t:8290&ictx=111";
 
+// Pickup row text — "Pickup at <bold street>".
+function buildPickupText() {
+  return (
+    <>
+      {PICKUP_LOCATION_PREFIX}
+      <strong>{PICKUP_LOCATION_ADDRESS}</strong>
+    </>
+  );
+}
+
 // "Delivery to <address>, <comment>" — the active-address row text (Image #10).
+// Only the street/comment (the variable part) is bold; "Delivery to" stays regular.
 function buildDeliveryText(addr) {
   if (!addr || !addr.address) return "Confirm you're in delivery range";
-  return `Delivery to ${addr.address}${addr.comment ? `, ${addr.comment}` : ""}`;
+  const street = `${addr.address}${addr.comment ? `, ${addr.comment}` : ""}`;
+  return (
+    <>
+      Delivery to <strong>{street}</strong>
+    </>
+  );
 }
 
 function DeliveryPickupPill() {
@@ -152,7 +179,7 @@ function DeliveryPickupPill() {
         <img src={locationIcon} alt="location" />
         <span>
           {selected === "pickup"
-            ? PICKUP_LOCATION_TEXT
+            ? buildPickupText()
             : buildDeliveryText(deliveryAddress)}
         </span>
         <span className="arrow">&#62;</span>

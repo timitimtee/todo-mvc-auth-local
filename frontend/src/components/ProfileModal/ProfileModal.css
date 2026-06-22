@@ -170,7 +170,8 @@
 @media (max-width: 600px) {
   .profile-modal {
     width: 100vw;
-    height: 100vh;
+    height: 100vh; /* fallback for browsers w/o dvh */
+    height: 100dvh; /* dvh tracks the shrinking URL bar -> top not clipped */
     border-radius: 0;
   }
 

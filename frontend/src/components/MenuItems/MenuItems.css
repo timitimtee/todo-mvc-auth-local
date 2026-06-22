@@ -4,8 +4,8 @@
 }
 
 .menu-section-title {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 800;
     color: #111;
     margin: 0 0 8px 0;
 }
@@ -129,6 +129,18 @@
     color: #c0392b;
     border-bottom: 2px solid #c0392b;
     font-weight: 700;
+}
+
+/* Short centered red rule between categories (see reference). Every section
+   except the first gets one above it, so the first title sits flush at the top
+   but each later category is visually separated as you scroll. */
+.category-section:not(:first-child)::before {
+    content: "";
+    display: block;
+    width: 120px;
+    height: 2px;
+    background: #c0392b;
+    margin: 24px auto;
 }
 
 .category-section {
